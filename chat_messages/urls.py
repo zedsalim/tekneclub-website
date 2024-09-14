@@ -5,4 +5,5 @@ app_name = 'chat_messages'
 
 urlpatterns = [
     path('messages/', listMessages_view, name='messages'),
+    path('messages/<int:pk>/delete', deleteMessage_view, name='delete-message'),
 ] 
