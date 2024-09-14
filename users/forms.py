@@ -20,6 +20,7 @@ class CustomUserCreationForm(UserCreationForm):
         widget=forms.TextInput(attrs={'class': 'bg-gray-700 appearance-none border border-gray-600 rounded w-full py-2 px-4 text-white', 'placeholder': 'Username'})
     )
     email = forms.EmailField(
+        max_length=100,
         required=True,
         widget=forms.EmailInput(attrs={'class': 'bg-gray-700 appearance-none border border-gray-600 rounded w-full py-2 px-4 text-white', 'placeholder': 'Email'})
     )
