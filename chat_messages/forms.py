@@ -33,3 +33,15 @@ class ContactUsForm(forms.ModelForm):
         if user and user.is_authenticated:
             self.fields['name'].initial = user.first_name + ' ' + user.last_name
             self.fields['email'].initial = user.email
+
+
+class ReplyMessageForm(forms.ModelForm):
+    content = forms.CharField(
+        max_length=1500,
+        required=True,
+        widget=forms.Textarea(attrs={'class': 'bg-gray-800 appearance-none border border-gray-700 rounded w-full py-2 px-4 text-white', 'placeholder': 'Your message', 'autofocus': True})
+    )
+    
+    class Meta:
+        model = Reply
+        fields = ["content"]

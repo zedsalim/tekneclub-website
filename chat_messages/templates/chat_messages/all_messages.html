@@ -37,8 +37,8 @@
         </td>
         <td class="py-2 px-4 text-sm">
           <div class="flex space-x-2">
-            <!-- Reply Button -->
-            <a href="" class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm">
+            <!-- Reply Link -->
+            <a href="{% url 'chat_messages:reply-message' message.pk %}" class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm">
               Reply
             </a>
             <!-- Mark as Spam Button -->
