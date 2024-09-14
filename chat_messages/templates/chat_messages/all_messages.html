@@ -42,9 +42,35 @@
               Reply
             </a>
             <!-- Mark as Spam Button -->
-            <a href="" class="bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded text-sm">
-              Spam
-            </a>
+            <button
+            data-target="markSpamDialog-{{message.pk}}"
+            class="openDialogBtn bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded text-sm"
+          >
+            Spam
+          </button>
+          <!-- Delete Confirmation Dialog -->
+          <div id="markSpamDialog-{{message.pk}}" class="dialog">
+            <div class="dialog-content">
+              <span class="dialog-close">&times;</span>
+              <h2 class="text-red-600 font-bold text-xl md:text-2xl">
+                Are you sure you want to mark this "{{ message.subject | title }}" as spam?
+              </h2>
+
+              <form
+                action="{% url 'chat_messages:mark-spam' message.pk %}"
+                method="post"
+                id="markSpamMessage-{{message.pk}}"
+                class="flex justify-center mt-4"
+              >
+                {% csrf_token %}
+                <button
+                  class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mt-2 rounded"
+                >
+                  Yes
+                </button>
+              </form>
+            </div>
+          </div>
             <!-- Delete Button -->
             <button
             data-target="deleteUnrepliedDialog-{{message.pk}}"

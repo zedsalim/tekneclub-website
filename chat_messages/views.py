@@ -23,17 +23,36 @@ def listMessages_view(request):
     }
     return render(request, 'chat_messages/all_messages.html', context)
 
+
 @login_required
 def deleteMessage_view(request, pk):
   if request.method == 'POST':
     current_user = request.user
     if not current_user.userprofile.is_responder:
-      messages.error(request, 'You do not have permission to delete messages')
+      messages.error(request, 'You do not have the necessary permissions.')
       return redirect('core:home')
     else:
       deleted_msg = Message.objects.filter(pk=pk).first()
       deleted_msg.delete()
       messages.success(request, 'Message deleted successfully')
+      return redirect('chat_messages:messages')
+  else:
+    messages.error(request, 'Method Not Allowed!')
+    return redirect('core:home')
+
+
+@login_required
+def markAsSpam_view(request, pk):
+  if request.method == 'POST':
+    current_user = request.user
+    if not current_user.userprofile.is_responder:
+      messages.error(request, 'You do not have the necessary permissions.')
+      return redirect('core:home')
+    else:
+      spam_message = Message.objects.filter(pk=pk).first()
+      spam_message.status = 'Spam'
+      spam_message.save()
+      messages.success(request, 'Message marked as spam')
       return redirect('chat_messages:messages')
   else:
     messages.error(request, 'Method Not Allowed!')
