@@ -94,6 +94,16 @@
           </li>
           {% endif %}
           <!---->
+          {% if user.userprofile.is_responder %}
+          <li>
+            <a
+              href="{% url 'chat_messages:messages' %}"
+              class="block px-4 py-2 hover:bg-gray-100"
+              >Messages</a
+            >
+          </li>
+          {% endif %}
+          <!---->
           {% if user.is_staff %}
           <li>
             <a
@@ -209,6 +219,14 @@
     <li>
       <a href="{% url 'core:new-event' %}" class="hover:text-gray-400"
         >Post Event</a
+      >
+    </li>
+    {% endif %}
+    <!---->
+    {% if user.userprofile.is_responder %}
+    <li>
+      <a href="{% url 'chat_messages:messages' %}" class="hover:bg-gray-400"
+        >Messages</a
       >
     </li>
     {% endif %}
