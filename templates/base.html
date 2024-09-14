@@ -13,6 +13,7 @@
     <link rel="stylesheet" href="{% static 'css/style.css' %}" />
     <link rel="stylesheet" href="{% static 'css/tinytoast.css' %}" />
     <link rel="stylesheet" href="{% static 'css/dialog.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/msg-notif.css' %}" />
     <link
       href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
       rel="stylesheet"
@@ -31,6 +32,35 @@
     <div class="container mx-auto flex-grow p-4 sm:p-6">
       {% block content %} {% endblock %}
     </div>
+
+    <!-- Message Notification -->
+    {% if user.is_authenticated %}
+    <!---->
+    {% if user.userprofile.is_responder and pending_count > 0 %}
+    <div
+      id="msg-notif-toast"
+      class="fixed bottom-4 right-4 bg-blue-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center space-x-3 slide-in-notif"
+    >
+      <a class="flex space-x-3" href="{% url 'chat_messages:messages'%}">
+        <i class="fas fa-envelope text-xl"></i>
+        <div class="flex-1">
+          <p id="msg-notif-toast-message" class="text-sm font-semibold"></p>
+        </div>
+      </a>
+      <button id="msg-close-notif" class="text-white ml-4 hover:text-gray-200">
+        <i class="fas fa-times text-xl"></i>
+      </button>
+    </div>
+
+    <script src="{% static 'js/msg-notif.js' %}"></script>
+    <script>
+      const message = new MessageNotif();
+      message.notify("You have {{ pending_count }} pending messages.", 1000);
+    </script>
+    {% endif %}
+    <!---->
+    {% endif %}
+
     <!---->
     {% include 'partials/_footer.html' %}
     <script src="{% static 'js/script.js' %}"></script>
