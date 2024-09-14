@@ -9,6 +9,7 @@ from django.core.files.storage import default_storage
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from users.models import UserProfile
+from chat_messages.forms import ContactUsForm
 from .forms import *
 from .models import *
 
@@ -25,9 +26,29 @@ def homePage_view(request):
             'image': first_image
         })
 
+    # Contact Us
+    if request.method == 'POST':
+        contact_form = ContactUsForm(request.POST)
+        current_user = request.user
+        if contact_form.is_valid():
+            if current_user.is_authenticated:
+                contact = contact_form.save(commit=False)
+                contact.sender = current_user.userprofile
+                contact.save()
+            else:
+                contact = contact_form.save()
+            messages.success(request, 'Message sent successfully')
+            return redirect('core:home')
+        else:
+            messages.error(request, 'Something went wrong!')
+
+    else:
+        contact_form = ContactUsForm()
+
     context = {
         'events_with_images': events_with_images,
-        'first_blogs': first_blogs
+        'first_blogs': first_blogs,
+        'contact_form': contact_form
     }
     return render(request, 'core/index.html', context)
 

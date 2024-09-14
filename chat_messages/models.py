@@ -9,9 +9,10 @@ class Message(models.Model):
         ('Spam', 'Spam'),
     )
     sender = models.ForeignKey(UserProfile, null=True, on_delete=models.SET_NULL)
-    subject = models.CharField(max_length=100)
-    content = models.TextField()
+    name = models.CharField(max_length=100)
     email = models.EmailField()
+    subject = models.CharField(max_length=150)
+    content = models.TextField(max_length=1000)
     sent_at = models.DateTimeField(auto_now_add=True)
     status = models.CharField(max_length=20, choices=STATUS, default='Pending')
     

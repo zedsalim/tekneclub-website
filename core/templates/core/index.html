@@ -348,34 +348,9 @@ print("CODE IS ART!")
 <!-- Contact Section -->
 <section id="contact" class="mt-20 px-4">
   <h2 class="text-3xl md:text-4xl font-bold text-center">Contact Us</h2>
-  <form class="max-w-lg mx-auto mt-8">
-    <div class="flex flex-col mb-4">
-      <label for="name" class="text-lg font-semibold">Name</label>
-      <input
-        type="text"
-        id="name"
-        class="bg-gray-800 appearance-none border border-gray-700 rounded w-full py-2 px-4 text-white"
-        required
-      />
-    </div>
-    <div class="flex flex-col mb-4">
-      <label for="email" class="text-lg font-semibold">Email</label>
-      <input
-        type="email"
-        id="email"
-        class="bg-gray-800 appearance-none border border-gray-700 rounded w-full py-2 px-4 text-white"
-        required
-      />
-    </div>
-    <div class="flex flex-col mb-4">
-      <label for="message" class="text-lg font-semibold">Message</label>
-      <textarea
-        id="message"
-        rows="4"
-        class="bg-gray-800 appearance-none border border-gray-700 rounded w-full py-2 px-4 text-white"
-        required
-      ></textarea>
-    </div>
+  {% if contact_form %}
+  <form method="post" class="max-w-lg mx-auto mt-8">
+    {% csrf_token %} {{ contact_form}}
     <button
       type="submit"
       class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
@@ -383,8 +358,8 @@ print("CODE IS ART!")
       Send Message
     </button>
   </form>
+  {% endif %}
 </section>
-
 <!-- Go Up -->
 <div class="flex justify-center mt-8">
   <a href="#" class="go-up-arrow group">
