@@ -60,6 +60,67 @@
   </table>
 </div>
 {% endif %}
+<!--  -->
+
+{% if replied_messages %}
+<h2 class="text-2xl font-bold mt-5 mb-4">Replied Messages</h2>
+<!-- prettier-ignore -->
+<div class="overflow-x-auto">
+  <table class="min-w-full bg-white border border-gray-300">
+    <thead>
+      <tr>
+        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">#</th>
+        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Sender</th>
+        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Name</th>
+        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Email</th>
+        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Subject</th>
+        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Sent At</th>
+        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Responder</th>
+        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Replied At</th>
+        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Status</th>
+        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for message in replied_messages %}
+      <tr class="border-t border-gray-300">
+        <td class="py-2 px-4 text-sm text-gray-700">{{ forloop.counter }}</td>
+        <td class="py-2 px-4 text-sm text-gray-700">{{ message.sender }}</td>
+        <td class="py-2 px-4 text-sm text-gray-700">{{ message.name }}</td>
+        <td class="py-2 px-4 text-sm text-gray-700">{{ message.email }}</td>
+        <td class="py-2 px-4 text-sm text-gray-700">{{ message.subject }}</td>
+        <td class="py-2 px-4 text-sm text-gray-700">{{ message.sent_at|date:"Y-m-d H:i" }}</td>
+        <td class="py-2 px-4 text-sm text-gray-700">
+         {{ message.reply_set.first.responder.user.first_name | title }} {{ message.reply_set.first.responder.user.last_name | title }}
+        </td>
+        <td class="py-2 px-4 text-sm text-gray-700">{{ message.reply_set.first.replied_at|date:"Y-m-d H:i" }}</td>
+        <td class="py-2 px-4 text-sm">
+          <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+            {{ message.status }}
+          </span>
+        </td>
+        <td class="py-2 px-4 text-sm">
+          <div class="flex space-x-2">
+            <!-- View Button -->
+            <a href="" class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm">
+              View
+            </a>
+            <!-- Delete Button -->
+            <form action="" method="POST">
+              {% csrf_token %}
+              <button type="submit" class="bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm">
+                Delete
+              </button>
+            </form>
+          </div>
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endif %}
+
 <!-- -->
 
 {% endblock %}
