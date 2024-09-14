@@ -13,6 +13,10 @@
     action="{% url 'users:login' %}"
   >
     {% csrf_token %} {{ login_form.as_p }}
+    <!-- Next URL -->
+    {% if request.GET.next %}
+    <input type="hidden" name="next" value="{{ request.GET.next }}" />
+    {% endif %}
     <button
       class="bg-gray-700 hover:bg-gray-600 text-white font-bold mt-4 py-2 px-4 rounded"
       type="submit"

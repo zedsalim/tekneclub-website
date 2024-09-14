@@ -38,7 +38,10 @@ def login_view(request):
           user = login_form.get_user()
           login(request, user)
           messages.success(request, f'Welcome back {user.first_name.capitalize()}') 
-          return redirect('core:home')
+          if 'next' in request.POST:
+            return redirect(request.POST.get('next'))
+          else:
+            return redirect('core:home')
     else:
         login_form = CustomAuthenticationForm()
     context = {
