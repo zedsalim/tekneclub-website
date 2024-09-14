@@ -1,6 +1,6 @@
+# forms.py
 from django import forms
 from .models import *
-
 
 class ContactUsForm(forms.ModelForm):
     name = forms.CharField(
@@ -24,5 +24,12 @@ class ContactUsForm(forms.ModelForm):
     )
 
     class Meta:
-              model = Message
-              fields = ["name", "email", "subject", "content"]
+        model = Message
+        fields = ["name", "email", "subject", "content"]
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        if user and user.is_authenticated:
+            self.fields['name'].initial = user.first_name + ' ' + user.last_name
+            self.fields['email'].initial = user.email

@@ -43,7 +43,7 @@ def homePage_view(request):
             messages.error(request, 'Something went wrong!')
 
     else:
-        contact_form = ContactUsForm()
+        contact_form = ContactUsForm(user=request.user)
 
     context = {
         'events_with_images': events_with_images,
