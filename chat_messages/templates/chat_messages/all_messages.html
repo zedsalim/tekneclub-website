@@ -151,7 +151,7 @@
         <td class="py-2 px-4 text-sm">
           <div class="flex space-x-2">
             <!-- View Button -->
-            <a href="" class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm">
+            <a href="{% url 'chat_messages:display-message' message.pk %}" class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm">
               View
             </a>
             <!-- Delete Button -->
@@ -230,7 +230,7 @@
         <td class="py-2 px-4 text-sm">
           <div class="flex space-x-2">
             <!-- View Button -->
-            <a href="" class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm">
+            <a href="{% url 'chat_messages:display-message' message.pk %}" class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm">
               View
             </a>
             <!-- Delete Button -->
