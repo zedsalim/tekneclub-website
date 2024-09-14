@@ -21,6 +21,12 @@ body {
 .footer {
   background-color: #222222;
 }
+
+.nav-logo {
+  width: 150px;
+  height: auto;
+}
+
 .modal-content {
   max-height: 70vh;
   overflow-y: auto;

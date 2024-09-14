@@ -1,8 +1,17 @@
+{% load static %}
 <!-- Navbar -->
-<nav class="navbar sticky top-0 z-50 p-4 flex items-center justify-between">
+<nav
+  class="navbar sticky top-0 z-50 p-4 flex items-center justify-between shadow-lg"
+>
   <!-- Logo -->
   <div class="logo text-xl font-bold">
-    <a href="{% url 'core:home' %}">TEKNE CLUB</a>
+    <a href="{% url 'core:home' %}">
+      <img
+        src="{% static 'images/nav-logo.png' %}"
+        alt="tekne logo"
+        class="nav-logo"
+      />
+    </a>
   </div>
 
   <!-- Desktop Menu Items -->
