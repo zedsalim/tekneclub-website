@@ -65,6 +65,8 @@
       {{ user_profile.is_event_poster|yesno:"Yes,No" }}
     </p>
   </div>
+
+  <!-- Update Profile Modal -->
   {% if user == user_profile.user %}
   <!-- Modal Trigger -->
   <div class="text-center mb-6">
@@ -75,30 +77,6 @@
       Update Profile
     </button>
   </div>
-  {% if user_profile.github_url or user_profile.linkedin_url %}
-  <!-- Profile Links -->
-  <div class="text-center flex justify-center items-center space-x-4">
-    {% if user_profile.github_url %}
-    <a
-      href="{{ user_profile.github_url }}"
-      class="text-gray-500 hover:text-white"
-    >
-      <i class="fab fa-github fa-2x"></i>
-    </a>
-    {% endif %}
-    <!---->
-    {% if user_profile.linkedin_url %}
-    <a
-      href="{{ user_profile.linkedin_url }}"
-      target="_blank"
-      class="text-gray-500 hover:text-white"
-    >
-      <i class="fab fa-linkedin fa-2x"></i>
-    </a>
-    {% endif %}
-  </div>
-  {% endif %}
-
   <!-- Dialog Structure -->
   <div id="dialog1" class="dialog hidden">
     <div class="dialog-content">
@@ -118,6 +96,31 @@
         </button>
       </form>
     </div>
+  </div>
+  {% endif %}
+
+  <!-- Profile Links -->
+  {% if user_profile.github_url or user_profile.linkedin_url %}
+  <div class="text-center flex justify-center items-center space-x-4">
+    {% if user_profile.github_url %}
+    <a
+      href="{{ user_profile.github_url }}"
+      target="_blank"
+      class="text-gray-500 hover:text-white"
+    >
+      <i class="fab fa-github fa-2x"></i>
+    </a>
+    {% endif %}
+    <!---->
+    {% if user_profile.linkedin_url %}
+    <a
+      href="{{ user_profile.linkedin_url }}"
+      target="_blank"
+      class="text-gray-500 hover:text-white"
+    >
+      <i class="fab fa-linkedin fa-2x"></i>
+    </a>
+    {% endif %}
   </div>
   {% endif %}
 </div>
