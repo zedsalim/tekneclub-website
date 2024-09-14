@@ -46,6 +46,7 @@ class UserProfile(models.Model):
     role = models.ManyToManyField(Role, blank=True)
     is_blog_poster = models.BooleanField(default=False)
     is_event_poster = models.BooleanField(default=False)
+    is_responder = models.BooleanField(default=False)
     github_url = models.URLField(blank=True, null=True)
     linkedin_url = models.URLField(blank=True, null=True)
 
