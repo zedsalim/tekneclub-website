@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 <!-- -->
 {% block content %}
+<!-- -->
+{% if pending_messages or replied_messages or spam_messages %}
 <!-- Pending Messages -->
 {% if pending_messages %}
 <h2 class="text-2xl font-bold mb-4">Unreplied Messages</h2>
@@ -271,5 +273,10 @@
   </table>
 </div>
 {% endif %}
+<!-- -->
+{% else %}
+<p class="text-center text-xl text-gray-500 mt-5">No messages available</p>
+{% endif %}
+
 <!-- -->
 {% endblock %}
