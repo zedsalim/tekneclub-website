@@ -16,7 +16,5 @@ class CustomUserAdmin(UserAdmin):
 admin.site.register(NewUser, CustomUserAdmin)
 admin.site.register(UserProfile)
 admin.site.register(Role)
-admin.site.register(Message)
-admin.site.register(Reply)
 
 
