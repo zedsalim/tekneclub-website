@@ -8,7 +8,7 @@ class Message(models.Model):
         ('Replied', 'Replied'),
         ('Spam', 'Spam'),
     )
-    sender = models.ForeignKey(UserProfile, null=True, on_delete=models.SET_NULL)
+    sender = models.ForeignKey(UserProfile, null=True, blank=True, on_delete=models.SET_NULL)
     name = models.CharField(max_length=100)
     email = models.EmailField()
     subject = models.CharField(max_length=150)
