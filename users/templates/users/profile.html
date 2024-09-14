@@ -1,0 +1,124 @@
+{% extends 'base.html' %}
+<!-- -->
+{% block title %}User Profile{% endblock %}
+<!-- -->
+{% block content %}
+<!-- Profile Container -->
+<div class="max-w-4xl mx-auto p-6 rounded-lg shadow-lg">
+  <!-- Profile Header -->
+  <div class="flex flex-col sm:flex-row items-center mb-6">
+    {% if user_profile.profile_pic %}
+    <img
+      src="{{ user_profile.profile_pic.url }}"
+      alt="Profile Picture"
+      class="w-24 h-24 rounded-full border-4 border-gray-300"
+    />
+    {% endif %}
+    <div class="mt-4 sm:mt-0 sm:ml-6 sm:text-left text-center">
+      <h1 class="text-2xl font-bold">
+        {{ user_profile.user.first_name | title }}
+        <!-- -->
+        {{ user_profile.user.last_name | title }}
+      </h1>
+      <div
+        class="flex flex-wrap justify-center sm:justify-start items-center space-x-4 mt-2"
+      >
+        {% for role in user_profile.role.all %}
+        <span
+          class="inline-block px-3 py-1 text-sm font-semibold text-white rounded-full mb-2 sm:mb-0"
+          style="border: solid 3px {{ role.color }};"
+          >{{ role.name }}</span
+        >
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+
+  <!-- Additional Profile Details -->
+  <div class="mb-6 space-y-2">
+    <p><strong>Gender:</strong> {{ user_profile.gender | title }}</p>
+    <p><strong>Study Year:</strong> {{ user_profile.study_year | upper }}</p>
+    <p><strong>University:</strong> {{ user_profile.university | title }}</p>
+    <p><strong>Department:</strong> {{ user_profile.department | title }}</p>
+    <p>
+      <strong>Interests:</strong>
+      {% for interest in user_profile.interests.all %}
+      <!-- -->
+      {{ interest | title }}
+      <!-- -->
+      {% if not forloop.last %}, {% endif %}
+      <!-- -->
+      {% endfor %}
+    </p>
+    <p>
+      <strong>Blog Poster:</strong>
+      {{ user_profile.is_blog_poster|yesno:"Yes,No" }}
+      <!---->
+      {% if user_profile.is_blog_poster %}
+      <!---->
+      <strong>({{ user_profile.post_set.count }} Posts)</strong>
+      <!---->
+      {% endif %}
+    </p>
+    <p>
+      <strong>Event Publisher:</strong>
+      {{ user_profile.is_event_poster|yesno:"Yes,No" }}
+    </p>
+  </div>
+  {% if user == user_profile.user %}
+  <!-- Modal Trigger -->
+  <div class="text-center mb-6">
+    <button
+      class="openDialogBtn bg-blue-500 text-white px-4 py-2 rounded"
+      data-target="dialog1"
+    >
+      Update Profile
+    </button>
+  </div>
+  {% if user_profile.github_url or user_profile.linkedin_url %}
+  <!-- Profile Links -->
+  <div class="text-center flex justify-center items-center space-x-4">
+    {% if user_profile.github_url %}
+    <a
+      href="{{ user_profile.github_url }}"
+      class="text-gray-500 hover:text-white"
+    >
+      <i class="fab fa-github fa-2x"></i>
+    </a>
+    {% endif %}
+    <!---->
+    {% if user_profile.linkedin_url %}
+    <a
+      href="{{ user_profile.linkedin_url }}"
+      target="_blank"
+      class="text-gray-500 hover:text-white"
+    >
+      <i class="fab fa-linkedin fa-2x"></i>
+    </a>
+    {% endif %}
+  </div>
+  {% endif %}
+
+  <!-- Dialog Structure -->
+  <div id="dialog1" class="dialog hidden">
+    <div class="dialog-content">
+      <span class="dialog-close">&times;</span>
+      <h2 class="text-xl font-bold">Update Profile</h2>
+      <form method="POST" enctype="multipart/form-data">
+        {% csrf_token %}
+        <!---->
+        {{ update_user_form.as_p }}
+        <!---->
+        {{ update_profile_form.as_p}}
+        <button
+          type="submit"
+          class="bg-blue-500 text-white px-4 py-2 mt-4 rounded"
+        >
+          Save Changes
+        </button>
+      </form>
+    </div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

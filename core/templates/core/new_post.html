@@ -1,0 +1,125 @@
+{% extends 'base.html' %}
+<!-- -->
+{% block content %}
+<!-- -->
+{% if add_blog_form %}
+<!-- Blog Form -->
+<form
+  enctype="multipart/form-data"
+  action="{% url 'core:new-blog' %}"
+  method="post"
+>
+  {% csrf_token %}
+  <h2 class="text-4xl font-bold mt-3 text-center">Add New Blog</h2>
+  {{ add_blog_form.as_p }}
+  <input type="hidden" name="image_ids" id="imageIdsInput" value="" />
+
+  <input
+    type="button"
+    value="Upload Images"
+    data-target="dialog-img-upload"
+    class="openDialogBtn bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 mt-3 rounded block mb-5 cursor-pointer"
+  />
+
+  <button
+    class="bg-gray-700 hover:bg-gray-600 text-white font-bold mt-3 py-2 px-4 rounded"
+    type="submit"
+  >
+    Add Post
+  </button>
+</form>
+{% endif %}
+<!-- -->
+{% if add_event_form %}
+<!-- Event Form -->
+<form
+  enctype="multipart/form-data"
+  action="{% url 'core:new-event' %}"
+  method="post"
+>
+  {% csrf_token %}
+  <h2 class="text-4xl font-bold mt-3 text-center">Add New Event</h2>
+  {{ add_event_form.as_p }}
+  <input type="hidden" name="image_ids" id="imageIdsInput" value="" />
+
+  <input
+    type="button"
+    value="Upload Images"
+    data-target="dialog-img-upload"
+    class="openDialogBtn bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 mt-3 rounded block mb-5 cursor-pointer"
+  />
+
+  <button
+    class="bg-gray-700 hover:bg-gray-600 text-white font-bold mt-3 py-2 px-4 rounded"
+    type="submit"
+  >
+    Add Post
+  </button>
+</form>
+{% endif %}
+
+<div id="dialog-img-upload" class="dialog">
+  <div class="dialog-content">
+    <span class="dialog-close">&times;</span>
+    <h2>Upload Image</h2>
+    <form id="imageUploadForm" enctype="multipart/form-data">
+      {% csrf_token %}
+      <input type="file" id="imageFile" name="imageFile" required />
+      <button
+        type="submit"
+        id="uploadBtn"
+        class="bg-gray-400 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+      >
+        Upload
+      </button>
+    </form>
+    <p id="uploadStatus" class="mt-2"></p>
+    <p id="imageURL" class="mt-2"></p>
+  </div>
+</div>
+
+{% endblock %}
+<!---->
+{% block scripts %}
+<script>
+  // Handle image upload
+  document.getElementById("imageUploadForm").onsubmit = function (event) {
+    event.preventDefault();
+
+    var formData = new FormData();
+    var fileInput = document.getElementById("imageFile");
+    formData.append("imageFile", fileInput.files[0]);
+
+    var csrfToken = document.querySelector("[name=csrfmiddlewaretoken]").value;
+
+    fetch("{% url 'core:upload-image' %}", {
+      method: "POST",
+      headers: {
+        "X-CSRFToken": csrfToken,
+      },
+      body: formData,
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        if (data.success) {
+          document.getElementById("imageURL").textContent = `${data.image_url}`;
+
+          var imageIdsInput = document.getElementById("imageIdsInput");
+          var currentIds = imageIdsInput.value
+            ? imageIdsInput.value.split(",")
+            : [];
+
+          currentIds.push(data.image_id);
+          imageIdsInput.value = currentIds.join(",");
+        } else {
+          document.getElementById(
+            "uploadStatus"
+          ).textContent = `Error: ${data.error}`;
+        }
+      })
+      .catch((error) => {
+        document.getElementById("uploadStatus").textContent = "Upload failed!";
+      });
+  };
+</script>
+{% endblock %}

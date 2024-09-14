@@ -1,0 +1,175 @@
+{% extends 'base.html' %}
+<!-- -->
+{% load static %}
+<!-- -->
+{% load custom_filters %}
+<!-- -->
+{% block content %}
+<!-- -->
+<section class="mt-20 px-4">
+  <h2 class="text-3xl md:text-4xl font-bold text-center">Our Events</h2>
+  <hr
+    class="w-3/4 h-px mt-20 mb-20 bg-gray-300 border-0 dark:bg-gray-600 opacity-80 mx-auto"
+  />
+  <!-- Search Input and Button -->
+  <div class="flex justify-center mb-8">
+    <input
+      type="text"
+      placeholder="Search..."
+      class="bg-gray-800 appearance-none border border-gray-700 rounded py-2 px-4 text-white w-1/2"
+    />
+    <button
+      class="bg-gray-700 hover:bg-gray-600 text-white font-bold p-2 rounded-r-md"
+    >
+      Search
+    </button>
+  </div>
+
+  {% if events_with_images %}
+  <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-10">
+    {% for item in events_with_images %}
+    <div class="bg-gray-800 p-4 rounded flex flex-col justify-between h-full">
+      <div>
+        <a href="{% url 'core:event-detail' slug=item.event.slug %}">
+          {% if item.image %}
+          <img
+            src="{{ item.image.image.url }}"
+            alt="Event Image"
+            class="w-full h-64 object-cover"
+          />
+          {% else %}
+          <img
+            src="{% static 'images/event-default.jpg' %}"
+            alt="Event Image"
+            class="w-full h-64 object-cover"
+          />
+          {% endif %}
+        </a>
+        <h3 class="text-xl md:text-2xl mt-4">
+          <a
+            href="{% url 'core:event-detail' slug=item.event.slug %}"
+            class="hover:text-white"
+            >{{ item.event.title | safe | title | truncatechars:50 }}</a
+          >
+        </h3>
+        <p class="mt-2">{{ item.event.content | truncate_html:50 | safe }}</p>
+      </div>
+      {% if user == item.event.author.user %}
+      <!-- Action Buttons -->
+      <div class="mt-4 flex justify-center space-x-4">
+        <button
+          data-target="deleteDialog-{{item.event.id}}"
+          class="openDialogBtn bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Delete
+        </button>
+        <form action="{% url 'core:edit-post' item.event.slug %}" method="post">
+          {% csrf_token %}
+          <button
+            type="submit"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Edit
+          </button>
+        </form>
+      </div>
+      <!-- Post Status -->
+      <div class="mt-2 flex justify-center">
+        <span class="text-sm font-medium">
+          Status: {% if item.event.status == 'Published' %}
+          <span
+            class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >Published</span
+          >
+          {% elif item.event.status == 'Draft' %}
+          <span
+            class="bg-yellow-100 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >Draft</span
+          >
+          {% elif item.event.status == 'Archived' %}
+          <span
+            class="bg-gray-100 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >Archived</span
+          >
+          {% else %}
+          <span
+            class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >Unknown</span
+          >
+          {% endif %}
+        </span>
+      </div>
+      <!-- Delete Confirmation Dialog -->
+      <div id="deleteDialog-{{item.event.id}}" class="dialog">
+        <div class="dialog-content">
+          <span class="dialog-close">&times;</span>
+          <h2 class="text-red-600 font-bold text-xl md:text-2xl">
+            Are you sure you want to delete "{{ item.event.title | title }}"?
+          </h2>
+
+          <form
+            action="{% url 'core:delete-post' item.event.slug %}"
+            method="post"
+            id="delete-post-{{item.event.id}}"
+            class="flex justify-center mt-4"
+          >
+            {% csrf_token %}
+            <button
+              class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+            >
+              Delete
+            </button>
+          </form>
+        </div>
+      </div>
+
+      {% endif %}
+    </div>
+
+    {% endfor %}
+  </div>
+  {% else %}
+  <p class="text-center text-xl text-gray-500 mt-10">No events available</p>
+  {% endif %}
+</section>
+<!-- Pagination -->
+<!-- prettier-ignore -->
+<div class="flex justify-center mt-8">
+  <nav aria-label="Page navigation">
+    <ul class="flex space-x-2">
+      {% if page_obj.has_previous %}
+      <li>
+        <a href="?page={{ page_obj.previous_page_number }}"
+           class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-l-md">
+          Previous
+        </a>
+      </li>
+      {% endif %}
+
+      {% for num in page_obj.paginator.page_range %}
+      <li>
+        {% if page_obj.number == num %}
+        <span class="bg-gray-600 text-white px-4 py-2">
+          {{ num }}
+        </span>
+        {% else %}
+        <a href="?page={{ num }}" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2">
+          {{ num }}
+        </a>
+        {% endif %}
+      </li>
+      {% endfor %}
+
+      {% if page_obj.has_next %}
+      <li>
+        <a href="?page={{ page_obj.next_page_number }}"
+           class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-r-md">
+          Next
+        </a>
+      </li>
+      {% endif %}
+    </ul>
+  </nav>
+</div>
+<!-- -->
+{% endblock %}

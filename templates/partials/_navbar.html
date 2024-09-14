@@ -1,0 +1,244 @@
+<!-- Navbar -->
+<nav class="navbar sticky top-0 z-50 p-4 flex items-center justify-between">
+  <!-- Logo -->
+  <div class="logo text-xl font-bold">
+    <a href="{% url 'core:home' %}">TEKNE CLUB</a>
+  </div>
+
+  <!-- Desktop Menu Items -->
+  <div class="hidden md:flex flex-grow justify-center">
+    <ul class="flex space-x-4">
+      <li><a href="{% url 'core:home' %}" class="hover:text-white">Home</a></li>
+      <li>
+        <a href="{% url 'core:all-events' %}" class="hover:text-white"
+          >Events</a
+        >
+      </li>
+      <li>
+        <a href="{% url 'core:all-blogs' %}" class="hover:text-white">Blogs</a>
+      </li>
+      <li>
+        <a href="{% url 'core:home' %}#about" class="hover:text-white">About</a>
+      </li>
+      <li>
+        <a href="{% url 'core:home' %}#contact" class="hover:text-white"
+          >Contact</a
+        >
+      </li>
+    </ul>
+  </div>
+
+  <!-- Desktop Right-Aligned Items -->
+  <div class="hidden md:flex items-center space-x-4">
+    {% if user.is_authenticated %}
+    <!-- User Dropdown -->
+    <div class="relative">
+      <button
+        id="user-menu-btn"
+        class="flex items-center space-x-2 hover:text-white"
+      >
+        <span>Menu</span>
+        <svg
+          class="w-5 h-5"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg"
+        >
+          <path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M19 9l-7 7-7-7"
+          ></path>
+        </svg>
+      </button>
+      <div
+        id="user-menu"
+        class="absolute right-0 mt-2 w-48 bg-white shadow-lg rounded-lg hidden"
+      >
+        <ul class="flex flex-col">
+          <li>
+            <a
+              href="{% url 'users:profile' user.userprofile.slug %}"
+              class="block px-4 py-2 hover:bg-gray-100 rounded-t-lg"
+              >Profile</a
+            >
+          </li>
+          {% if user.userprofile.is_blog_poster %}
+          <li>
+            <a
+              href="{% url 'core:new-blog' %}"
+              class="block px-4 py-2 hover:bg-gray-100 rounded-t-lg"
+              >Create Blog</a
+            >
+          </li>
+          {% endif %}
+          <!---->
+          {% if user.userprofile.is_event_poster %}
+          <li>
+            <a
+              href="{% url 'core:new-event' %}"
+              class="block px-4 py-2 hover:bg-gray-100 rounded-t-lg"
+              >Post Event</a
+            >
+          </li>
+          {% endif %}
+          <!---->
+          {% if user.is_staff %}
+          <li>
+            <a
+              href="{% url 'admin:index' %}"
+              class="block px-4 py-2 hover:bg-gray-100"
+              >Admin</a
+            >
+          </li>
+          {% endif %}
+          <li>
+            <a
+              href="javascript:{document.getElementById('logout').submit()}"
+              class="block px-4 py-2 hover:bg-gray-100 rounded-b-lg"
+              >Logout</a
+            >
+            <form action="{% url 'users:logout' %}" method="post" id="logout">
+              {% csrf_token %}
+              <input type="hidden" />
+            </form>
+          </li>
+        </ul>
+      </div>
+    </div>
+    {% else %}
+    <a href="{% url 'users:login' %}">
+      <button
+        class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+      >
+        Login
+      </button>
+    </a>
+    <a href="{% url 'users:register' %}">
+      <button
+        class="bg-gray-500 hover:bg-gray-400 text-white font-bold py-2 px-4 rounded"
+      >
+        Join Us
+      </button>
+    </a>
+    {% endif %}
+  </div>
+
+  <!-- Hamburger Icon for Mobile -->
+  <div class="md:hidden flex items-center">
+    <button id="hamburger" class="text-white focus:outline-none">
+      <svg
+        class="w-6 h-6"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M4 6h16M4 12h16M4 18h16"
+        ></path>
+      </svg>
+    </button>
+  </div>
+</nav>
+
+<!-- Off-Canvas Menu -->
+<div
+  id="offcanvas"
+  class="offcanvas shadow-md fixed bg-custom inset-y-0 left-0 z-40 p-4 md:hidden w-64"
+>
+  <div class="flex justify-end">
+    <button id="close-btn" class="bg-gray-300 px-4 py-2 rounded-lg">X</button>
+  </div>
+  <ul class="flex flex-col space-y-4 mt-10">
+    <li>
+      <a href="{% url 'core:home' %}" class="hover:text-gray-400">Home</a>
+    </li>
+    <li>
+      <a href="{% url 'core:all-events' %}" class="hover:text-gray-400"
+        >Events</a
+      >
+    </li>
+    <li>
+      <a href="{% url 'core:all-blogs' %}" class="hover:text-gray-400">Blogs</a>
+    </li>
+    <li>
+      <a href="{% url 'core:home' %}#about" class="hover:text-gray-400"
+        >About</a
+      >
+    </li>
+    <li>
+      <a href="{% url 'core:home' %}#contact" class="hover:text-gray-400"
+        >Contact</a
+      >
+    </li>
+    {% if user.is_authenticated %}
+    <hr
+      class="w-3/4 h-px mt-20 mb-20 bg-gray-300 border-0 dark:bg-gray-600 opacity-80"
+    />
+    <li>
+      <a
+        href="{% url 'users:profile' user.userprofile.slug %}"
+        class="hover:text-gray-400"
+        >Profile</a
+      >
+    </li>
+    {% if user.userprofile.is_blog_poster %}
+    <li>
+      <a href="{% url 'core:new-blog' %}" class="hover:text-gray-400"
+        >Create Blog</a
+      >
+    </li>
+    {% endif %}
+    <!---->
+    {% if user.userprofile.is_event_poster %}
+    <li>
+      <a href="{% url 'core:new-event' %}" class="hover:text-gray-400"
+        >Post Event</a
+      >
+    </li>
+    {% endif %}
+    <!---->
+    {% if user.is_staff %}
+    <li>
+      <a href="{% url 'admin:index' %}" class="hover:text-gray-400">Admin</a>
+    </li>
+    {% endif %}
+    <li>
+      <a
+        href="javascript:{document.getElementById('logout').submit()}"
+        class="hover:text-gray-400"
+        >Logout</a
+      >
+      <form action="{% url 'users:logout' %}" method="post" id="logout">
+        {% csrf_token %}
+        <input type="hidden" />
+      </form>
+    </li>
+    {% else %}
+    <li>
+      <a href="{% url 'users:login' %}">
+        <button
+          class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+        >
+          Login
+        </button>
+      </a>
+    </li>
+    <li>
+      <a href="{% url 'users:register' %}">
+        <button
+          class="bg-gray-500 hover:bg-gray-400 text-white font-bold py-2 px-4 rounded"
+        >
+          Join Us
+        </button>
+      </a>
+    </li>
+    {% endif %}
+  </ul>
+</div>

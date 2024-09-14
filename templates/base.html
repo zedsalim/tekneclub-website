@@ -1,0 +1,46 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>{% block title %}TEKNE CLUB{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/tinytoast.css' %}" />
+    <link rel="stylesheet" href="{% static 'css/dialog.css' %}" />
+    <link
+      href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css"
+      integrity="sha512-Kc323vGBEqzTmouAECnVceyQqyqdsSiqLQISBL29aUW4U/M7pSPA/gEUZQqv1cwx4OnYxTxve5UMg5GT6L4JJg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+  </head>
+  <body class="flex flex-col min-h-screen">
+    {% include 'partials/_navbar.html' %}
+    <!-- Content -->
+    <div class="container mx-auto flex-grow p-4 sm:p-6">
+      {% block content %} {% endblock %}
+    </div>
+    <!---->
+    {% include 'partials/_footer.html' %}
+    <script src="{% static 'js/script.js' %}"></script>
+    <script src="{% static 'js/dialog.js' %}"></script>
+    <script src="{% static 'js/menu.js' %}"></script>
+    <script src="{% static 'js/tinytoast.js' %}"></script>
+    {% if messages %}
+    <script>
+      {% for message in messages %}
+      const tinytoast = new TinyToast();
+      tinytoast.{{ message.tags }}("{{ message }}");
+      {% endfor %}
+    </script>
+    {% endif %}
+    <!-- Custome scripts -->
+    {% block scripts %} {% endblock %}
+  </body>
+</html>

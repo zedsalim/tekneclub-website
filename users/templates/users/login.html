@@ -1,0 +1,53 @@
+{% extends "base.html" %} {% load static %}
+<!---->
+{% block content%}
+<section class="mt-20 w-3/4 mx-auto text-center">
+  <img
+    src="{% static 'images/club-logo.png' %}"
+    alt="Club Logo"
+    class="w-1/4 mx-auto mb-8"
+  />
+  <form
+    class="bg-gray-800 p-10 rounded"
+    method="post"
+    action="{% url 'users:login' %}"
+  >
+    {% csrf_token %} {{ login_form.as_p }}
+    <button
+      class="bg-gray-700 hover:bg-gray-600 text-white font-bold mt-4 py-2 px-4 rounded"
+      type="submit"
+    >
+      Login
+    </button>
+    <p class="mt-3">
+      Not a member?
+      <a
+        class="font-medium underline hover:text-white"
+        href="{% url 'users:register' %}"
+        >Sign Up
+      </a>
+    </p>
+  </form>
+</section>
+{% endblock %} {% block scripts %}
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const usernameInput = document.querySelector('input[name="username"]');
+
+    if (usernameInput) {
+      usernameInput.classList.add(
+        "bg-gray-700",
+        "appearance-none",
+        "border",
+        "border-gray-600",
+        "rounded",
+        "w-full",
+        "py-2",
+        "px-4",
+        "text-white"
+      );
+      usernameInput.setAttribute("placeholder", "Enter your email");
+    }
+  });
+</script>
+{% endblock %}

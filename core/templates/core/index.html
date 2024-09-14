@@ -1,0 +1,391 @@
+{% extends 'base.html' %}
+<!---->
+{% load static %}
+<!-- -->
+{% load custom_filters %}
+<!---->
+{% block content %}
+<!-- Home Section -->
+<section id="home" class="text-center mt-20 px-4">
+  <div class="typewriter mt-10 mb-20">
+    <h1 class="text-3xl md:text-5xl font-bold" id="typewriter-text"></h1>
+    <div class="cursor"></div>
+  </div>
+
+  <div class="mt-4">
+    <a href="#" class="mx-2"
+      ><i class="fab fa-facebook-f text-xl md:text-2xl"></i
+    ></a>
+    <a href="#" class="mx-2"
+      ><i class="fab fa-twitter text-xl md:text-2xl"></i
+    ></a>
+    <a href="#" class="mx-2"
+      ><i class="fab fa-instagram text-xl md:text-2xl"></i
+    ></a>
+  </div>
+</section>
+<div id="about"></div>
+<hr
+  class="w-3/4 h-px mt-20 mb-20 bg-gray-300 border-0 dark:bg-gray-600 opacity-80 mx-auto"
+/>
+<!-- About Us Section -->
+<section class="flex flex-wrap justify-center items-center mt-20 px-4">
+  <div class="flex flex-col md:flex-row items-center w-full md:w-3/4">
+    <img
+      src="{% static 'images/club-logo.png' %}"
+      alt="Club Logo"
+      class="shadow-md w-3/4 md:w-1/4 mb-4 md:mb-0"
+    />
+    <div class="text-lg md:ml-10">
+      <p>
+        Welcome to the <strong>TEKNE Club’s Website!</strong> We are a group of
+        students who are passionate about everything related to IT. Our meetings
+        are held in <strong>University of Bouira “Akli Mohand Oulhadj”</strong>.
+        During our meetings, we work on projects, discuss new technologies, and
+        learn from each other. Whether you are just starting out in programming
+        or have experience under your belt, you are welcome to join us. We have
+        members with a range of skill levels and are always looking for new
+        people to collaborate with. If you are interested in joining, please
+        come to one of our meetings or contact us.
+      </p>
+      <pre>
+          <code class="block mt-4 bg-gray-800 p-4 rounded">
+print("CODE IS ART!")
+    if True:
+       print("Join Us")
+          </code>
+          </pre>
+    </div>
+  </div>
+</section>
+
+<!-- Go Up -->
+<div class="flex justify-center">
+  <a href="#" class="go-up-arrow group">
+    <i class="fa-solid fa-arrow-up"></i>
+  </a>
+</div>
+
+<!-- HR -->
+<hr
+  class="w-3/4 h-px mt-20 mb-20 bg-gray-300 border-0 dark:bg-gray-600 opacity-80 mx-auto"
+/>
+
+<!-- Events Section -->
+<section id="events" class="mt-20 px-4">
+  <h2 class="text-3xl md:text-4xl font-bold text-center">Our Events</h2>
+  {% if events_with_images %}
+  <div class="flex flex-wrap justify-center mt-10">
+    {% for item in events_with_images %}
+    <!-- Event -->
+    <div
+      class="text-center w-full sm:w-1/3 md:w-2/4 lg:w-1/4 px-2 mb-4 scale-container"
+    >
+      <div class="openDialogBtn" data-target="dialog-{{ item.event.id }}">
+        {% if item.image %}
+        <img
+          src="{{ item.image.image.url }}"
+          alt="Event Image"
+          class="border-solid border-2 border-sky-500 rounded-md w-full h-64 object-cover"
+        />
+        {% else %}
+        <img
+          src="{% static 'images/event-default.jpg' %}"
+          alt="Event Image"
+          class="border-solid border-2 border-sky-500 rounded-md w-full h-64 object-cover"
+        />
+        {% endif %}
+        <p class="mt-2 font-semibold custom-text-sm sm:text-sm">
+          {{ item.event.title | title | truncatechars:50 }}
+        </p>
+      </div>
+      {% if user == item.event.author.user %}
+      <!-- Action Buttons -->
+      <div class="mt-4 flex justify-center space-x-4">
+        <button
+          data-target="deleteDialog-{{item.event.id}}"
+          class="openDialogBtn bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Delete
+        </button>
+        <form action="{% url 'core:edit-post' item.event.slug %}" method="post">
+          {% csrf_token %}
+          <button
+            type="submit"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Edit
+          </button>
+        </form>
+      </div>
+      <!-- Post Status -->
+      <div class="mt-2 flex justify-center">
+        <span class="text-sm font-medium">
+          Status: {% if item.event.status == 'Published' %}
+          <span
+            class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >Published</span
+          >
+          {% elif item.event.status == 'Draft' %}
+          <span
+            class="bg-yellow-100 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >Draft</span
+          >
+          {% elif item.event.status == 'Archived' %}
+          <span
+            class="bg-gray-100 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >Archived</span
+          >
+          {% else %}
+          <span
+            class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >Unknown</span
+          >
+          {% endif %}
+        </span>
+      </div>
+    </div>
+    <!-- Delete Confirmation Dialog -->
+    <div id="deleteDialog-{{item.event.id}}" class="dialog">
+      <div class="dialog-content">
+        <span class="dialog-close">&times;</span>
+        <h2 class="text-red-600 font-bold text-xl md:text-2xl">
+          Are you sure you want to delete "{{ item.event.title | title }}"?
+        </h2>
+
+        <form
+          action="{% url 'core:delete-post' item.event.slug %}"
+          method="post"
+          id="delete-post-{{item.event.id}}"
+          class="flex justify-center mt-4"
+        >
+          {% csrf_token %}
+          <button
+            class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mt-2 rounded"
+          >
+            Delete
+          </button>
+        </form>
+      </div>
+      {% endif %}
+    </div>
+
+    <!-- Modal -->
+    <!--prettier-ignore-->
+    <div
+      id="dialog-{{ item.event.id }}"
+      class="dialog"
+    >
+      <div
+        class="dialog-content"
+      >
+        <span
+          class="dialog-close"
+          >&times;</span
+          >
+        <h2 class="text-2xl font-semibold mb-2 hover:text-white"> 
+          <a href="{% url 'core:event-detail' slug=item.event.slug %}">{{ item.event.title | title }}</a>
+        </h2>
+        <!-- prettier-ignore -->
+        <div class="text-gray-300 text-sm mt-2">
+              <p>
+                Published on {{ item.event.created_at | date:"F d, Y" }} by
+                <a href="{% url 'users:profile' item.event.author.slug %}" class="font-medium underline hover:text-white"
+                  >{{ item.event.author }}</a
+                >
+              </p>
+          </div>
+        <p class="text-base pt-7">{{ item.event.content|safe }}</p>
+      </div>
+    </div>
+    {% endfor %}
+    <!---->
+    {% else %}
+    <p class="text-center text-xl text-gray-500 mt-10">No events available</p>
+    {% endif %}
+  </div>
+
+  {% if events_with_images %}
+  <div class="text-center mt-10">
+    <a href="{% url 'core:all-events' %}" class="hover:text-white"
+      >See All Events</a
+    >
+  </div>
+  {% endif %}
+</section>
+
+<!-- Go Up -->
+<div class="flex justify-center">
+  <a href="#" class="go-up-arrow group mt-8">
+    <i class="fa-solid fa-arrow-up"></i>
+  </a>
+</div>
+
+<hr
+  class="w-3/4 h-px mt-20 mb-20 bg-gray-300 border-0 dark:bg-gray-600 opacity-80 mx-auto"
+/>
+
+<!-- Latest Blogs Section -->
+<!--prettier-ignore-->
+<section id="blog" class="mt-20">
+  <h2 class="text-4xl font-bold text-center">Latest Blogs</h2>
+  {% if first_blogs %}
+  <div class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-10">
+    {% for item in first_blogs %}
+    <div class="bg-gray-800 p-4 rounded w-11/12 mx-auto flex flex-col">
+      <h3 class="text-2xl mt-4">
+        <a href="{% url 'core:blog-detail' item.slug %}" class="text-2xl font-semibold hover:text-white">{{ item.title | title | truncatechars:80 }}</a>
+      </h3>
+      <div class="text-gray-300 text-sm mt-2">
+        <p>
+          Published on {{ item.created_at | date:"F d, Y" }} by
+          <a href="{% url 'users:profile' item.author.slug %}" class="font-medium underline hover:text-white">{{ item.author }}</a>
+        </p>
+      </div>
+      <p class="mt-2 flex-grow">{{ item.content | truncate_html:250 | safe }}</p>
+      <div class="mt-2 flex justify-start">
+        <a href="{% url 'core:blog-detail' item.slug %}" class="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded inline-block">Read more</a>
+      </div>
+      {% if user == item.author.user %}
+      <!-- Action Buttons -->
+      <div class="mt-4 flex justify-center space-x-4">
+        <button
+          data-target="deleteDialog-{{item.id}}"
+          class="openDialogBtn bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+        >
+          Delete
+        </button>
+        <form action="{% url 'core:edit-post' item.slug %}" method="post">
+          {% csrf_token %}
+          <button
+            type="submit"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+          >
+            Edit
+          </button>
+        </form>
+      </div>
+      <!-- Post Status -->
+      <div class="mt-2 flex justify-center">
+        <span class="text-sm font-medium">
+          Status: {% if item.status == 'Published' %}
+          <span
+            class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >Published</span
+          >
+          {% elif item.status == 'Draft' %}
+          <span
+            class="bg-yellow-100 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >Draft</span
+          >
+          {% elif item.status == 'Archived' %}
+          <span
+            class="bg-gray-100 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >Archived</span
+          >
+          {% else %}
+          <span
+            class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+            >Unknown</span
+          >
+          {% endif %}
+        </span>
+      </div>
+      <!-- Delete Confirmation Dialog -->
+      <div id="deleteDialog-{{item.id}}" class="dialog">
+        <div class="dialog-content">
+          <span class="dialog-close">&times;</span>
+          <h2 class="text-red-600 font-bold text-xl md:text-2xl">
+            Are you sure you want to delete "{{ item.title | title }}"?
+          </h2>
+
+          <form
+            action="{% url 'core:delete-post' item.slug %}"
+            method="post"
+            id="delete-post-{{item.id}}"
+            class="flex justify-center mt-4"
+          >
+            {% csrf_token %}
+            <button
+              class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mt-2 rounded"
+            >
+              Delete
+            </button>
+          </form>
+        </div>
+      </div>
+      {% endif %}
+    </div>
+    {% endfor %}
+  </div>
+  <div class="text-center mt-10">
+    <a href="{% url 'core:all-blogs' %}" class="hover:text-white">See All Blogs</a>
+  </div>
+  <!---->
+  {% else %}
+  <p class="text-center text-xl text-gray-500 mt-10">No events available</p>
+  {% endif %}
+</section>
+
+<!-- Go Up -->
+<div class="flex justify-center mt-8">
+  <a href="#" class="go-up-arrow group">
+    <i class="fa-solid fa-arrow-up"></i>
+  </a>
+</div>
+
+<hr
+  class="w-3/4 h-px mt-20 mb-20 bg-gray-300 border-0 dark:bg-gray-600 opacity-80 mx-auto"
+/>
+
+<!-- Contact Section -->
+<section id="contact" class="mt-20 px-4">
+  <h2 class="text-3xl md:text-4xl font-bold text-center">Contact Us</h2>
+  <form class="max-w-lg mx-auto mt-8">
+    <div class="flex flex-col mb-4">
+      <label for="name" class="text-lg font-semibold">Name</label>
+      <input
+        type="text"
+        id="name"
+        class="bg-gray-800 appearance-none border border-gray-700 rounded w-full py-2 px-4 text-white"
+        required
+      />
+    </div>
+    <div class="flex flex-col mb-4">
+      <label for="email" class="text-lg font-semibold">Email</label>
+      <input
+        type="email"
+        id="email"
+        class="bg-gray-800 appearance-none border border-gray-700 rounded w-full py-2 px-4 text-white"
+        required
+      />
+    </div>
+    <div class="flex flex-col mb-4">
+      <label for="message" class="text-lg font-semibold">Message</label>
+      <textarea
+        id="message"
+        rows="4"
+        class="bg-gray-800 appearance-none border border-gray-700 rounded w-full py-2 px-4 text-white"
+        required
+      ></textarea>
+    </div>
+    <button
+      type="submit"
+      class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded"
+    >
+      Send Message
+    </button>
+  </form>
+</section>
+
+<!-- Go Up -->
+<div class="flex justify-center mt-8">
+  <a href="#" class="go-up-arrow group">
+    <i class="fa-solid fa-arrow-up"></i>
+  </a>
+</div>
+
+<hr
+  class="w-3/4 h-px mt-20 mb-20 bg-gray-300 border-0 dark:bg-gray-600 opacity-80 mx-auto"
+/>
+{% endblock %}

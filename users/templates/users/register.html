@@ -1,0 +1,32 @@
+{% extends "base.html" %} {% load static %}
+<!---->
+{% block content%}
+<section class="mt-20 w-3/4 mx-auto text-center">
+  <img
+    src="{% static 'images/club-logo.png' %}"
+    alt="Club Logo"
+    class="w-1/4 mx-auto mb-8"
+  />
+  <form
+    class="bg-gray-800 p-10 rounded"
+    method="post"
+    action="{% url 'users:register' %}"
+  >
+    {% csrf_token %} {{ register_form.as_p }}
+    <button
+      class="bg-gray-700 hover:bg-gray-500 text-white font-bold mt-4 py-2 px-4 rounded"
+      type="submit"
+    >
+      Register
+    </button>
+    <p class="mt-3">
+      Already a member?
+      <a
+        class="font-medium underline hover:text-white"
+        href="{% url 'users:login' %}"
+        >Sign In
+      </a>
+    </p>
+  </form>
+</section>
+{% endblock %}

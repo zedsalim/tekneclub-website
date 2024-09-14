@@ -1,0 +1,91 @@
+{% extends 'base.html' %}
+<!-- -->
+{% block content %} {% if blog_detail %}
+<!-- -->
+{% if user == blog_detail.author.user %}
+<!-- Action Buttons -->
+<div class="mt-4 flex justify-center space-x-4">
+  <button
+    data-target="deleteDialog-{{blog_detail.id}}"
+    class="openDialogBtn bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
+  >
+    Delete
+  </button>
+  <form action="{% url 'core:edit-post' blog_detail.slug %}" method="post">
+    {% csrf_token %}
+    <button
+      type="submit"
+      class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+    >
+      Edit
+    </button>
+  </form>
+</div>
+<!-- Post Status -->
+<div class="mt-2 flex justify-center">
+  <span class="text-sm font-medium">
+    Status: {% if blog_detail.status == 'Published' %}
+    <span
+      class="bg-green-100 text-green-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+      >Published</span
+    >
+    {% elif blog_detail.status == 'Draft' %}
+    <span
+      class="bg-yellow-100 text-yellow-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+      >Draft</span
+    >
+    {% elif blog_detail.status == 'Archived' %}
+    <span
+      class="bg-gray-100 text-gray-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+      >Archived</span
+    >
+    {% else %}
+    <span
+      class="bg-red-100 text-red-800 text-xs font-semibold mr-2 px-2.5 py-0.5 rounded"
+      >Unknown</span
+    >
+    {% endif %}
+  </span>
+</div>
+<!-- Delete Confirmation Dialog -->
+<div id="deleteDialog-{{blog_detail.id}}" class="dialog">
+  <div class="dialog-content">
+    <span class="dialog-close">&times;</span>
+    <h2 class="text-red-600 font-bold text-xl md:text-2xl">
+      Are you sure you want to delete "{{ blog_detail.title | title }}"?
+    </h2>
+
+    <form
+      action="{% url 'core:delete-post' blog_detail.slug %}"
+      method="post"
+      id="delete-post-{{blog_detail.id}}"
+      class="flex justify-center mt-4"
+    >
+      {% csrf_token %}
+      <button
+        class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mt-2 rounded"
+      >
+        Delete
+      </button>
+    </form>
+  </div>
+</div>
+{% endif %}
+<section class="mt-20 max-w-4xl mx-auto">
+  <h2 class="text-3xl md:text-4xl font-bold">
+    {{ blog_detail.title | safe | title }}
+  </h2>
+  <!-- prettier-ignore -->
+  <div class="text-gray-300 text-sm mt-2">
+    <p>
+      Published on {{ blog_detail.created_at | date:"F d, Y" }} by
+      <a href="{% url 'users:profile' blog_detail.author.slug %}" class="font-medium underline hover:text-white"
+        >{{ blog_detail.author }}</a
+      >
+    </p>
+  </div>
+  <p class="mt-4 text-lg">{{ blog_detail.content | safe }}</p>
+</section>
+{% endif %}
+<!-- -->
+{% endblock %}
