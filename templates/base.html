@@ -34,8 +34,8 @@
     <script src="{% static 'js/tinytoast.js' %}"></script>
     {% if messages %}
     <script>
-      {% for message in messages %}
       const tinytoast = new TinyToast();
+      {% for message in messages %}
       tinytoast.{{ message.tags }}("{{ message }}");
       {% endfor %}
     </script>
