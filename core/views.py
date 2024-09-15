@@ -56,13 +56,31 @@ def homePage_view(request):
 
 def eventsPage_view(request):
     user = request.user
-
-    if user.is_authenticated:
-        published_events = Post.objects.filter(status='Published', post_type='Event')
-        user_events = Post.objects.filter(author=user.userprofile, post_type='Event').exclude(status='Published')
-        all_events = published_events.union(user_events).order_by('-created_at')
+    if user.is_authenticated and user.userprofile.is_event_poster:
+        categories = Category.objects.annotate(
+            post_count=Count('post', filter=Q(post__post_type='Event'))
+        )
     else:
-        all_events = Post.objects.filter(status='Published', post_type='Event').order_by('-created_at')
+        categories = Category.objects.annotate(
+            post_count=Count('post', filter=Q(post__status='Published', post__post_type='Event'))
+        )
+
+    selected_category = request.GET.get('category')
+    if selected_category and not Category.objects.filter(slug=selected_category).exists():
+        selected_category = None
+
+    published_events = Post.objects.filter(status='Published', post_type='Event')
+    if selected_category:
+        published_events = published_events.filter(categories__slug=selected_category)
+
+    user_events = Post.objects.none()
+    if user.is_authenticated and user.userprofile.is_event_poster:
+        user_events = Post.objects.filter(author=user.userprofile, post_type='Event')
+        if selected_category:
+            user_events = user_events.filter(categories__slug=selected_category)
+
+    all_events = published_events | user_events
+    all_events = all_events.order_by('-created_at')
 
     paginator = Paginator(all_events, 6)
     page = request.GET.get('page')
@@ -84,6 +102,8 @@ def eventsPage_view(request):
     context = {
         'events_with_images': events_with_images,
         'page_obj': events,
+        'categories': categories,
+        'selected_category': selected_category,
     }
     return render(request, 'core/all_events.html', context)
 

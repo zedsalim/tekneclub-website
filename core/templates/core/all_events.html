@@ -11,6 +11,29 @@
   <hr
     class="w-3/4 h-px mt-20 mb-20 bg-gray-300 border-0 dark:bg-gray-600 opacity-80 mx-auto"
   />
+
+  <!-- Filter By Category -->
+  <!-- prettier-ignore -->
+  <div class="flex justify-center items-center text-center">
+    <form method="GET" action="">
+      <div class="mb-4">
+        <label for="category" class="block text-xl font-bold mb-2">
+          Filter by Category:
+        </label>
+        <select name="category" id="category" onchange="this.form.submit()"
+                class="block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600">
+          <option value="">All Categories</option>
+          {% for category in categories %}
+            <option value="{{ category.slug }}" 
+                    {% if selected_category == category.slug %}selected{% endif %}>
+              {{ category.name }} ({{ category.post_count }})
+            </option>
+          {% endfor %}
+        </select>
+      </div>
+    </form>
+  </div>
+
   <!-- Search Input and Button -->
   <div class="flex justify-center mb-8">
     <input
@@ -139,7 +162,7 @@
     <ul class="flex space-x-2">
       {% if page_obj.has_previous %}
       <li>
-        <a href="?page={{ page_obj.previous_page_number }}"
+        <a href="?page={{ page_obj.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}"
            class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-l-md">
           Previous
         </a>
@@ -153,7 +176,7 @@
           {{ num }}
         </span>
         {% else %}
-        <a href="?page={{ num }}" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2">
+        <a href="?page={{ num }}{% if selected_category %}&category={{ selected_category }}{% endif %}" class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2">
           {{ num }}
         </a>
         {% endif %}
@@ -162,7 +185,7 @@
 
       {% if page_obj.has_next %}
       <li>
-        <a href="?page={{ page_obj.next_page_number }}"
+        <a href="?page={{ page_obj.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}"
            class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-r-md">
           Next
         </a>
