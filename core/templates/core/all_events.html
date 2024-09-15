@@ -12,6 +12,20 @@
     class="w-3/4 h-px mt-20 mb-20 bg-gray-300 border-0 dark:bg-gray-600 opacity-80 mx-auto"
   />
 
+  <!-- Search Input and Button -->
+  <div class="flex justify-center mb-8">
+    <input
+      type="text"
+      placeholder="Search..."
+      class="bg-gray-800 appearance-none border border-gray-700 rounded py-2 px-4 text-white w-1/2"
+    />
+    <button
+      class="bg-gray-700 hover:bg-gray-600 text-white font-bold p-2 rounded-r-md"
+    >
+      Search
+    </button>
+  </div>
+  
   <!-- Filter By Category -->
   <!-- prettier-ignore -->
   <div class="flex justify-center items-center text-center">
@@ -32,20 +46,6 @@
         </select>
       </div>
     </form>
-  </div>
-
-  <!-- Search Input and Button -->
-  <div class="flex justify-center mb-8">
-    <input
-      type="text"
-      placeholder="Search..."
-      class="bg-gray-800 appearance-none border border-gray-700 rounded py-2 px-4 text-white w-1/2"
-    />
-    <button
-      class="bg-gray-700 hover:bg-gray-600 text-white font-bold p-2 rounded-r-md"
-    >
-      Search
-    </button>
   </div>
 
   {% if events_with_images %}
