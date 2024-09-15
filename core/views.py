@@ -4,6 +4,7 @@ from PIL import Image, UnidentifiedImageError
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
+from django.db.models import Count, Q
 from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
 from django.http import JsonResponse
@@ -89,13 +90,31 @@ def eventsPage_view(request):
 
 def blogsPage_view(request):
     user = request.user
-
-    if user.is_authenticated:
-        user_blogs = Post.objects.filter(author=user.userprofile, post_type='Blog')
-        published_blogs = Post.objects.filter(status='Published', post_type='Blog')
-        all_blogs = published_blogs.union(user_blogs).order_by('-created_at')
+    if user.is_authenticated and user.userprofile.is_blog_poster:
+        categories = Category.objects.annotate(
+            post_count=Count('post', filter=Q(post__post_type='Blog'))
+        )
     else:
-        all_blogs = Post.objects.filter(status='Published', post_type='Blog').order_by('-created_at')
+        categories = Category.objects.annotate(
+            post_count=Count('post', filter=Q(post__status='Published', post__post_type='Blog'))
+        )
+
+    selected_category = request.GET.get('category')
+    if selected_category and not Category.objects.filter(slug=selected_category).exists():
+        selected_category = None
+
+    published_blogs = Post.objects.filter(status='Published', post_type='Blog')
+    if selected_category:
+        published_blogs = published_blogs.filter(categories__slug=selected_category)
+
+    user_blogs = Post.objects.none()
+    if user.is_authenticated and user.userprofile.is_blog_poster:
+        user_blogs = Post.objects.filter(author=user.userprofile, post_type='Blog')
+        if selected_category:
+            user_blogs = user_blogs.filter(categories__slug=selected_category)
+
+    all_blogs = published_blogs | user_blogs
+    all_blogs = all_blogs.order_by('-created_at')
 
     paginator = Paginator(all_blogs, 6)
     page = request.GET.get('page')
@@ -107,7 +126,9 @@ def blogsPage_view(request):
         blogs = paginator.page(paginator.num_pages)
 
     context = {
-        'all_blogs': blogs
+        'all_blogs': blogs,
+        'categories': categories,
+        'selected_category': selected_category,
     }
     return render(request, 'core/all_blogs.html', context)
 

@@ -27,6 +27,28 @@
     </button>
   </div>
 
+  <!-- Filter By Category -->
+  <!-- prettier-ignore -->
+  <div class="flex justify-center items-center text-center">
+      <form method="GET" action="">
+        <div class="mb-4">
+          <label for="category" class="block text-xl font-bold mb-2">
+            Filter by Category:
+          </label>
+          <select name="category" id="category" onchange="this.form.submit()"
+                  class="block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600">
+            <option value="">All Categories</option>
+            {% for category in categories %}
+      <option value="{{ category.slug }}" 
+              {% if selected_category == category.slug %}selected{% endif %}>
+        {{ category.name }} ({{ category.post_count }})
+      </option>
+    {% endfor %}
+          </select>
+        </div>
+      </form>
+  </div>
+
   {% if all_blogs %}
   <div
     class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 mt-10 w-11/12 mx-auto"
@@ -143,7 +165,7 @@
       {% if all_blogs.has_previous %}
       <li>
         <a
-          href="?page={{ all_blogs.previous_page_number }}"
+          href="?page={{ all_blogs.previous_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}"
           class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-l-md"
         >
           Previous
@@ -157,7 +179,7 @@
         <span class="bg-gray-600 text-white px-4 py-2"> {{ num }} </span>
         {% else %}
         <a
-          href="?page={{ num }}"
+          href="?page={{ num }}{% if selected_category %}&category={{ selected_category }}{% endif %}"
           class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2"
         >
           {{ num }}
@@ -169,7 +191,7 @@
       {% if all_blogs.has_next %}
       <li>
         <a
-          href="?page={{ all_blogs.next_page_number }}"
+          href="?page={{ all_blogs.next_page_number }}{% if selected_category %}&category={{ selected_category }}{% endif %}"
           class="bg-gray-700 hover:bg-gray-600 text-white px-4 py-2 rounded-r-md"
         >
           Next
