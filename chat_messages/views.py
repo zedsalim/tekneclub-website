@@ -26,6 +26,21 @@ def listMessages_view(request):
 
 
 @login_required
+def listMessagesForRegularUsers_view(request):
+  current_user = request.user.userprofile
+  pending_messages = Message.objects.filter(sender=current_user, status='Pending').all()
+  replied_messages = Message.objects.filter(sender=current_user, status='Replied').all()
+  spam_messages = Message.objects.filter(sender=current_user, status='Spam').all()
+
+  context = {
+    'pending_messages': pending_messages,
+    'replied_messages': replied_messages,
+    'spam_messages': spam_messages
+  }
+  return render(request, 'chat_messages/users_messages.html', context)
+
+
+@login_required
 def deleteMessage_view(request, pk):
   if request.method == 'POST':
     current_user = request.user
@@ -111,4 +126,3 @@ def displayMessage_view(request, pk):
     else:
         messages.error(request, 'You do not have the necessary permissions.')
         return redirect('core:home')
-

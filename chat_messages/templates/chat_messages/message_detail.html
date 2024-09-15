@@ -50,7 +50,7 @@
       </p>
       <p class="text-gray-700"><strong>Replied At:</strong> {{ reply_msg.replied_at|date:"Y-m-d H:i" }}</p>
       <p class="text-gray-700"><strong>Reply Content:</strong></p>
-      <p class="text-gray-700">{{ msg_to_display.content|linebreaksbr }}</p>
+      <p class="text-gray-700">{{ reply_msg.content|linebreaksbr }}</p>
   </div>
 </div>
 {% endif %}

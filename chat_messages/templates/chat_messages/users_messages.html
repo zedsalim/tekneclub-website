@@ -12,9 +12,6 @@
     <thead>
       <tr>
         <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">#</th>
-        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Sender</th>
-        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Name</th>
-        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Email</th>
         <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Subject</th>
         <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Content</th>
         <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Sent At</th>
@@ -26,9 +23,6 @@
       {% for message in pending_messages %}
       <tr class="border-t border-gray-300">
         <td class="py-2 px-4 text-sm text-gray-700">{{ forloop.counter }}</td>
-        <td class="py-2 px-4 text-sm text-gray-700">{{ message.sender }}</td>
-        <td class="py-2 px-4 text-sm text-gray-700">{{ message.name }}</td>
-        <td class="py-2 px-4 text-sm text-gray-700">{{ message.email }}</td>
         <td class="py-2 px-4 text-sm text-gray-700">{{ message.subject }}</td>
         <td class="py-2 px-4 text-sm text-gray-700">{{ message.content|truncatechars:50 }}</td>
         <td class="py-2 px-4 text-sm text-gray-700">{{ message.sent_at|date:"Y-m-d H:i" }}</td>
@@ -39,70 +33,10 @@
         </td>
         <td class="py-2 px-4 text-sm">
           <div class="flex space-x-2">
-            <!-- Reply Link -->
-            <a href="{% url 'chat_messages:reply-message' message.pk %}" class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm">
-              Reply
+            <!-- View Button -->
+            <a href="{% url 'chat_messages:display-message' message.pk %}" class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm">
+              View
             </a>
-            <!-- Mark as Spam Button -->
-            <button
-            data-target="markSpamDialog-{{message.pk}}"
-            class="openDialogBtn bg-yellow-500 hover:bg-yellow-600 text-white py-1 px-3 rounded text-sm"
-            >
-            Spam
-            </button>
-            <!-- Spam Confirmation Dialog -->
-            <div id="markSpamDialog-{{message.pk}}" class="dialog">
-              <div class="dialog-content">
-                <span class="dialog-close">&times;</span>
-                <h2 class="text-red-600 font-bold text-xl md:text-2xl">
-                  Are you sure you want to mark this "{{ message.subject | title }}" as spam?
-                </h2>
-
-                <form
-                  action="{% url 'chat_messages:mark-spam' message.pk %}"
-                  method="post"
-                  id="markSpamMessage-{{message.pk}}"
-                  class="flex justify-center mt-4"
-                >
-                  {% csrf_token %}
-                  <button
-                    class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mt-2 rounded"
-                  >
-                    Yes
-                  </button>
-                </form>
-              </div>
-            </div>
-            <!-- Delete Button -->
-            <button
-            data-target="deleteUnrepliedDialog-{{message.pk}}"
-            class="openDialogBtn bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm"
-          >
-            Delete
-          </button>
-          <!-- Delete Confirmation Dialog -->
-          <div id="deleteUnrepliedDialog-{{message.pk}}" class="dialog">
-            <div class="dialog-content">
-              <span class="dialog-close">&times;</span>
-              <h2 class="text-red-600 font-bold text-xl md:text-2xl">
-                Are you sure you want to delete "{{ message.subject | title }}"?
-              </h2>
-
-              <form
-                action="{% url 'chat_messages:delete-message' message.pk %}"
-                method="post"
-                id="deleteUnrepliedMessage-{{message.pk}}"
-                class="flex justify-center mt-4"
-              >
-                {% csrf_token %}
-                <button
-                  class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mt-2 rounded"
-                >
-                  Delete
-                </button>
-              </form>
-            </div>
-          </div>
           </div>
         </td>
       </tr>
@@ -121,9 +55,6 @@
     <thead>
       <tr>
         <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">#</th>
-        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Sender</th>
-        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Name</th>
-        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Email</th>
         <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Subject</th>
         <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Sent At</th>
         <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Responder</th>
@@ -136,9 +67,6 @@
       {% for message in replied_messages %}
       <tr class="border-t border-gray-300">
         <td class="py-2 px-4 text-sm text-gray-700">{{ forloop.counter }}</td>
-        <td class="py-2 px-4 text-sm text-gray-700">{{ message.sender }}</td>
-        <td class="py-2 px-4 text-sm text-gray-700">{{ message.name }}</td>
-        <td class="py-2 px-4 text-sm text-gray-700">{{ message.email }}</td>
         <td class="py-2 px-4 text-sm text-gray-700">{{ message.subject }}</td>
         <td class="py-2 px-4 text-sm text-gray-700">{{ message.sent_at|date:"Y-m-d H:i" }}</td>
         <td class="py-2 px-4 text-sm text-gray-700">
@@ -151,41 +79,25 @@
           </span>
         </td>
         <td class="py-2 px-4 text-sm">
-          <div class="flex space-x-2">
+          <div class="flex space-x-2 items-center">
             <!-- View Button -->
             <a href="{% url 'chat_messages:display-message' message.pk %}" class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm">
               View
             </a>
-            <!-- Delete Button -->
-            <button
-            data-target="deleteRepliedDialog-{{message.pk}}"
-            class="openDialogBtn bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm"
-          >
-            Delete
-          </button>
-          <!-- Delete Confirmation Dialog -->
-          <div id="deleteRepliedDialog-{{message.pk}}" class="dialog">
-            <div class="dialog-content">
-              <span class="dialog-close">&times;</span>
-              <h2 class="text-red-600 font-bold text-xl md:text-2xl">
-                Are you sure you want to delete "{{ message.subject | title }}"?
-              </h2>
-
-              <form
-                action="{% url 'chat_messages:delete-message' message.pk %}"
-                method="post"
-                id="deleteRepliedMessage-{{message.pk}}"
-                class="flex justify-center mt-4"
+            {% if not message.reply_set.first.is_read %}
+            <!-- Mark as Read Button -->
+            <form
+              action=""
+              method="post"
+            >
+              {% csrf_token %}
+              <button
+                class="bg-green-500 hover:bg-green-600 text-white py-1 px-3 rounded text-sm "
               >
-                {% csrf_token %}
-                <button
-                  class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mt-2 rounded"
-                >
-                  Delete
-                </button>
-              </form>
-            </div>
-          </div>
+                Mark as Read
+              </button>
+            </form>
+            {% endif %}
           </div>
         </td>
       </tr>
@@ -204,9 +116,6 @@
     <thead>
       <tr>
         <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">#</th>
-        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Sender</th>
-        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Name</th>
-        <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Email</th>
         <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Subject</th>
         <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Content</th>
         <th class="py-2 px-4 bg-gray-100 text-left text-sm font-semibold text-gray-700">Sent At</th>
@@ -235,36 +144,6 @@
             <a href="{% url 'chat_messages:display-message' message.pk %}" class="bg-blue-500 hover:bg-blue-600 text-white py-1 px-3 rounded text-sm">
               View
             </a>
-            <!-- Delete Button -->
-            <button
-            data-target="deleteSpamDialog-{{message.pk}}"
-            class="openDialogBtn bg-red-500 hover:bg-red-600 text-white py-1 px-3 rounded text-sm"
-          >
-            Delete
-          </button>
-          <!-- Delete Confirmation Dialog -->
-          <div id="deleteSpamDialog-{{message.pk}}" class="dialog">
-            <div class="dialog-content">
-              <span class="dialog-close">&times;</span>
-              <h2 class="text-red-600 font-bold text-xl md:text-2xl">
-                Are you sure you want to delete "{{ message.subject | title }}"?
-              </h2>
-
-              <form
-                action="{% url 'chat_messages:delete-message' message.pk %}"
-                method="post"
-                id="deleteSpamMessage-{{message.pk}}"
-                class="flex justify-center mt-4"
-              >
-                {% csrf_token %}
-                <button
-                  class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 mt-2 rounded"
-                >
-                  Delete
-                </button>
-              </form>
-            </div>
-          </div>
           </div>
         </td>
       </tr>
