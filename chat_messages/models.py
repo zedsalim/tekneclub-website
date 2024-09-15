@@ -24,6 +24,7 @@ class Reply(models.Model):
     message = models.ForeignKey(Message, on_delete=models.CASCADE)
     content = models.TextField()
     replied_at = models.DateTimeField(auto_now_add=True)
+    is_read = models.BooleanField(default=False)
 
     class Meta:
         verbose_name = 'Reply'

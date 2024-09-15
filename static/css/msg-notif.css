@@ -1,9 +1,7 @@
 .slide-in-notif {
   transform: translateX(100%);
   opacity: 0;
-  transition:
-    transform 0.5s ease,
-    opacity 0.5s ease;
+  transition: transform 0.5s ease, opacity 0.5s ease;
 }
 
 .show-message-notif {
@@ -14,7 +12,5 @@
 .slide-out-notif {
   transform: translateX(100%);
   opacity: 0;
-  transition:
-    transform 0.5s ease,
-    opacity 0.5s ease;
+  transition: transform 0.5s ease, opacity 0.5s ease;
 }

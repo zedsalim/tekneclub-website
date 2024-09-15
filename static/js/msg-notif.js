@@ -1,8 +1,8 @@
 class MessageNotif {
-  constructor() {
-    this.toast = document.getElementById("msg-notif-toast");
-    this.messageElement = document.getElementById("msg-notif-toast-message");
-    this.closeButton = document.getElementById("msg-close-notif");
+  constructor(targetId) {
+    this.toast = document.getElementById(targetId);
+    this.messageElement = this.toast.querySelector(".msg-notif-toast-message");
+    this.closeButton = this.toast.querySelector(".msg-close-notif");
 
     if (this.toast && this.messageElement && this.closeButton) {
       this.closeButton.addEventListener("click", () => {

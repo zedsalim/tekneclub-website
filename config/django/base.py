@@ -67,6 +67,7 @@ TEMPLATES = [
                 "django.contrib.auth.context_processors.auth",
                 "django.contrib.messages.context_processors.messages",
                 'chat_messages.context_processors.pending_messages',
+                'chat_messages.context_processors.unread_replied_messages',
             ],
         },
     },
