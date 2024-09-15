@@ -98,11 +98,17 @@
             <a
               href="{% url 'chat_messages:messages' %}"
               class="block px-4 py-2 hover:bg-gray-100"
-              >Messages</a
+              >All Messages</a
             >
           </li>
           {% endif %}
-          <!---->
+          <li>
+            <a
+              href="{% url 'chat_messages:users-messages' %}"
+              class="block px-4 py-2 hover:bg-gray-100"
+              >My Messages</a
+            >
+          </li>
           {% if user.is_staff %}
           <li>
             <a
@@ -225,7 +231,7 @@
     {% if user.userprofile.is_responder %}
     <li>
       <a href="{% url 'chat_messages:messages' %}" class="hover:bg-gray-400"
-        >Messages</a
+        >All Messages</a
       >
     </li>
     {% endif %}

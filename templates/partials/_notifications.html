@@ -24,13 +24,15 @@
   class="fixed {% if pending_count > 0 %} bottom-16 {% else %} bottom-4 {% endif %} right-4 bg-green-500 text-white px-4 py-3 rounded-lg shadow-lg flex items-center space-x-3 slide-in-notif"
   data-target="msg-notif-toast-2"
 >
-  <i class="fas fa-bell text-xl"></i>
-  <div class="flex-1">
-    <p class="msg-notif-toast-message text-sm font-semibold"></p>
-  </div>
-  <button class="msg-close-notif text-white ml-4 hover:text-gray-200">
-    <i class="fas fa-times text-xl"></i>
-  </button>
+  <a class="flex space-x-3" href="{% url 'chat_messages:users-messages' %}">
+    <i class="fas fa-bell text-xl"></i>
+    <div class="flex-1">
+      <p class="msg-notif-toast-message text-sm font-semibold"></p>
+    </div>
+    <button class="msg-close-notif text-white ml-4 hover:text-gray-200">
+      <i class="fas fa-times text-xl"></i>
+    </button>
+  </a>
 </div>
 {% endif %}
 

@@ -87,7 +87,7 @@
             {% if not message.reply_set.first.is_read %}
             <!-- Mark as Read Button -->
             <form
-              action=""
+              action="{% url 'chat_messages:mark-read' message.pk %}"
               method="post"
             >
               {% csrf_token %}
@@ -97,6 +97,10 @@
                 Mark as Read
               </button>
             </form>
+            {% else %}
+            <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium bg-green-100 text-green-800">
+              Marked
+            </span>
             {% endif %}
           </div>
         </td>
@@ -127,9 +131,6 @@
       {% for message in spam_messages %}
       <tr class="border-t border-gray-300">
         <td class="py-2 px-4 text-sm text-gray-700">{{ forloop.counter }}</td>
-        <td class="py-2 px-4 text-sm text-gray-700">{{ message.sender }}</td>
-        <td class="py-2 px-4 text-sm text-gray-700">{{ message.name }}</td>
-        <td class="py-2 px-4 text-sm text-gray-700">{{ message.email }}</td>
         <td class="py-2 px-4 text-sm text-gray-700">{{ message.subject }}</td>
         <td class="py-2 px-4 text-sm text-gray-700">{{ message.content|truncatechars:50 }}</td>
         <td class="py-2 px-4 text-sm text-gray-700">{{ message.sent_at|date:"Y-m-d H:i" }}</td>

@@ -77,6 +77,21 @@ def markAsSpam_view(request, pk):
 
 
 @login_required
+def markAsRead_view(request, pk):
+  if request.method == 'POST':
+      message = get_object_or_404(Message, pk=pk, status='Replied')
+      unread_reply = Reply.objects.filter(message=message, is_read=False).first()
+      unread_reply.is_read = True
+      unread_reply.save()
+      messages.success(request, 'Reply marked as read')
+      return redirect('chat_messages:users-messages')
+
+  else:
+    messages.error(request, 'Invalid request method.')
+    return redirect('core:home')
+
+
+@login_required
 def replyToMessage_view(request, pk):
     current_user = request.user
     if not current_user.userprofile.is_responder:
