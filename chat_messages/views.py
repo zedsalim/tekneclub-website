@@ -55,10 +55,10 @@ def markAsSpam_view(request, pk):
       spam_message.save()
       messages.success(request, 'Message marked as spam')
       return redirect('chat_messages:messages')
-  
-  # Handle cases where the method is not POST
-  messages.error(request, 'Invalid request method.')
-  return redirect('core:home')
+
+  else:
+    messages.error(request, 'Invalid request method.')
+    return redirect('core:home')
 
 
 @login_required
@@ -98,16 +98,17 @@ def replyToMessage_view(request, pk):
 
 @login_required
 def displayMessage_view(request, pk):
+    msg_to_display = get_object_or_404(Message, pk=pk)
     current_user = request.user
-    if not current_user.userprofile.is_responder:
+    if current_user.userprofile.is_responder or current_user.userprofile == msg_to_display.sender:
+        reply_msg = Reply.objects.filter(message=msg_to_display).first()
+        
+        context = {
+            'reply_msg': reply_msg,
+            'msg_to_display': msg_to_display
+        }
+        return render(request, 'chat_messages/message_detail.html', context)
+    else:
         messages.error(request, 'You do not have the necessary permissions.')
         return redirect('core:home')
 
-    msg_to_display = get_object_or_404(Message, pk=pk)
-    reply_msg = Reply.objects.filter(message=msg_to_display).first()
-    
-    context = {
-        'reply_msg': reply_msg,
-        'msg_to_display': msg_to_display
-    }
-    return render(request, 'chat_messages/message_detail.html', context)
