@@ -11,6 +11,7 @@ from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from users.models import UserProfile
 from chat_messages.forms import ContactUsForm, FeedBackForm
+from chat_messages.models import FeedBack
 from .forms import *
 from .models import *
 
@@ -20,6 +21,7 @@ def homePage_view(request):
     first_blogs = Post.objects.filter(status='Published', post_type='Blog').order_by('-created_at')[:2]
     first_events = Post.objects.filter(status='Published', post_type='Event').order_by('-created_at')[:3]
     events_with_images = []
+    feedbacks = FeedBack.objects.all().order_by('-fbk_sent_at')
 
     for event in first_events:
         first_image = PostImages.objects.filter(post=event).first()
@@ -29,7 +31,7 @@ def homePage_view(request):
         })
 
     # Contact Us
-    if request.method == 'POST':
+    if request.method == 'POST' and request.POST.get('subject'):
         contact_form = ContactUsForm(request.POST)
         if contact_form.is_valid():
             if current_user.is_authenticated:
@@ -47,7 +49,7 @@ def homePage_view(request):
         contact_form = ContactUsForm(user=request.user)
     
     # Feedback
-    if request.method == 'POST':
+    if request.method == 'POST' and request.POST.get('fbk_content'):
         feedback_form = FeedBackForm(request.POST)
         if feedback_form.is_valid():
             if current_user.is_authenticated:
@@ -69,6 +71,7 @@ def homePage_view(request):
         'first_blogs': first_blogs,
         'contact_form': contact_form,
         'feedback_form': feedback_form,
+        'feedbacks': feedbacks,
     }
     return render(request, 'core/index.html', context)
 

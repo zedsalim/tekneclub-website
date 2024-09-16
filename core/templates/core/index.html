@@ -364,10 +364,69 @@ print("CODE IS ART!")
   </a>
 </div>
 
+{% if feedbacks and feedbacks.count < 3 %}
 <div id="contact"></div>
+{% endif %}
 <hr
   class="w-3/4 h-px mt-20 mb-20 bg-gray-300 border-0 dark:bg-gray-600 opacity-80 mx-auto"
 />
+
+{% if feedbacks and feedbacks.count > 3 %}
+<!-- Feedback Slider -->
+<section class="mt-20">
+  <h2 class="text-3xl md:text-4xl font-bold text-center">Members Feedback</h2>
+  <div
+    class="max-w-2xl mx-auto mt-10 px-4 py-8 bg-gray-800 shadow-lg rounded-lg"
+  >
+    <div id="testimonial-slider" class="relative overflow-hidden">
+      <!-- Slides -->
+      <div
+        class="testimonial-slide flex transition-transform duration-500 ease-in-out mx-5"
+      >
+        {% for feedback in feedbacks %}
+        <div
+          class="testimonial-item w-full flex-shrink-0 px-6 py-10 sm:py-8 sm:px-4 flex flex-col items-center text-center justify-center"
+        >
+          <p class="text-gray-300 italic text-lg sm:text-base">
+            "{{ feedback.fbk_content | title }}"
+          </p>
+          <p class="mt-4 text-gray-200 font-bold sm:mt-2">
+            - {{ feedback.fbk_name | title }}
+          </p>
+        </div>
+        {% endfor %}
+      </div>
+
+      <!-- Controls -->
+      <button
+        id="prev-btn"
+        class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-gray-700 text-white px-4 py-2 my-3 rounded-full shadow-lg hover:bg-gray-600"
+      >
+        &lt;
+      </button>
+      <button
+        id="next-btn"
+        class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-gray-700 text-white px-4 py-2 my-3 rounded-full shadow-lg hover:bg-gray-600"
+      >
+        &gt;
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Go Up -->
+<div class="flex justify-center mt-8">
+  <a href="#" class="go-up-arrow group">
+    <i class="fa-solid fa-arrow-up"></i>
+  </a>
+</div>
+{% if feedbacks and feedbacks.count > 3 %}
+<div id="contact"></div>
+{% endif %}
+<hr
+  class="w-3/4 h-px mt-20 mb-20 bg-gray-300 border-0 dark:bg-gray-600 opacity-80 mx-auto"
+/>
+{% endif %}
 
 <!-- Contact Section -->
 <section class="mt-20 px-4">
