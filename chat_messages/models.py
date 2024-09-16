@@ -32,3 +32,13 @@ class Reply(models.Model):
     
     def __str__(self):
         return f'Reply To: {self.message.subject}'
+
+
+class FeedBack(models.Model):
+    sender = models.ForeignKey(UserProfile, null=True, blank=True, on_delete=models.SET_NULL)
+    name = models.CharField(max_length=100)
+    content = models.TextField(max_length=1000)
+    sent_at = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f'{self.name}: {self.content}'

@@ -33,6 +33,11 @@
           >Contact</a
         >
       </li>
+      <li>
+        <a href="{% url 'core:home' %}#feedback" class="hover:text-gray-400"
+          >Feedback</a
+        >
+      </li>
     </ul>
   </div>
 
@@ -199,6 +204,11 @@
     <li>
       <a href="{% url 'core:home' %}#contact" class="hover:text-gray-400"
         >Contact</a
+      >
+    </li>
+    <li>
+      <a href="{% url 'core:home' %}#feedback" class="hover:text-gray-400"
+        >Feedback</a
       >
     </li>
     {% if user.is_authenticated %}

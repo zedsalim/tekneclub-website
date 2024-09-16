@@ -10,12 +10,13 @@ from django.core.files.storage import default_storage
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from users.models import UserProfile
-from chat_messages.forms import ContactUsForm
+from chat_messages.forms import ContactUsForm, FeedBackForm
 from .forms import *
 from .models import *
 
 
 def homePage_view(request):
+    current_user = request.user
     first_blogs = Post.objects.filter(status='Published', post_type='Blog').order_by('-created_at')[:2]
     first_events = Post.objects.filter(status='Published', post_type='Event').order_by('-created_at')[:3]
     events_with_images = []
@@ -30,7 +31,6 @@ def homePage_view(request):
     # Contact Us
     if request.method == 'POST':
         contact_form = ContactUsForm(request.POST)
-        current_user = request.user
         if contact_form.is_valid():
             if current_user.is_authenticated:
                 contact = contact_form.save(commit=False)
@@ -45,11 +45,30 @@ def homePage_view(request):
 
     else:
         contact_form = ContactUsForm(user=request.user)
+    
+    # Feedback
+    if request.method == 'POST':
+        feedback_form = FeedBackForm(request.POST)
+        if feedback_form.is_valid():
+            if current_user.is_authenticated:
+                feedback = feedback_form.save(commit=False)
+                feedback.sender = current_user.userprofile
+                feedback.save()
+            else:
+                feedback = feedback_form.save()
+            messages.success(request, 'Feedback sent successfully')
+            return redirect('core:home')
+        else:
+            messages.error(request, 'Something went wrong!')
+
+    else:
+        feedback_form = FeedBackForm(user=request.user)
 
     context = {
         'events_with_images': events_with_images,
         'first_blogs': first_blogs,
-        'contact_form': contact_form
+        'contact_form': contact_form,
+        'feedback_form': feedback_form,
     }
     return render(request, 'core/index.html', context)
 

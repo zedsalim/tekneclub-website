@@ -31,7 +31,7 @@ class ContactUsForm(forms.ModelForm):
         user = kwargs.pop('user', None)
         super().__init__(*args, **kwargs)
         if user and user.is_authenticated:
-            self.fields['name'].initial = user.first_name + ' ' + user.last_name
+            self.fields['name'].initial = user.first_name.capitalize() + ' ' + user.last_name.capitalize()
             self.fields['email'].initial = user.email
 
 
@@ -45,3 +45,26 @@ class ReplyMessageForm(forms.ModelForm):
     class Meta:
         model = Reply
         fields = ["content"]
+
+
+class FeedBackForm(forms.ModelForm):
+    name = forms.CharField(
+        max_length=100,
+        required=True,
+        widget=forms.TextInput(attrs={'class': 'bg-gray-800 appearance-none border border-gray-700 rounded w-full py-2 px-4 text-white', 'placeholder': 'Complete Name', 'autofocus': False})
+    )
+    content = forms.CharField(
+        max_length=1000,
+        required=True,
+        widget=forms.Textarea(attrs={'class': 'bg-gray-800 appearance-none border border-gray-700 rounded w-full py-2 px-4 text-white', 'placeholder': 'Your feedback', 'autofocus': False, 'rows': 5})
+    )
+
+    class Meta:
+        model = FeedBack
+        fields = ["name", "content"]
+
+    def __init__(self, *args, **kwargs):
+        user = kwargs.pop('user', None)
+        super().__init__(*args, **kwargs)
+        if user and user.is_authenticated:
+            self.fields['name'].initial = user.first_name.capitalize() + ' ' + user.last_name.capitalize()

@@ -364,16 +364,17 @@ print("CODE IS ART!")
   </a>
 </div>
 
+<div id="contact"></div>
 <hr
   class="w-3/4 h-px mt-20 mb-20 bg-gray-300 border-0 dark:bg-gray-600 opacity-80 mx-auto"
 />
 
 <!-- Contact Section -->
-<section id="contact" class="mt-20 px-4">
+<section class="mt-20 px-4">
   <h2 class="text-3xl md:text-4xl font-bold text-center">Contact Us</h2>
   {% if contact_form %}
   <form method="post" class="max-w-lg mx-auto mt-8">
-    {% csrf_token %} {{ contact_form}}
+    {% csrf_token %} {{ contact_form }}
     <button
       type="submit"
       class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 mt-2 rounded"
@@ -383,6 +384,33 @@ print("CODE IS ART!")
   </form>
   {% endif %}
 </section>
+<!-- Go Up -->
+<div class="flex justify-center mt-8">
+  <a href="#" class="go-up-arrow group">
+    <i class="fa-solid fa-arrow-up"></i>
+  </a>
+</div>
+
+<hr
+  class="w-3/4 h-px mt-20 mb-20 bg-gray-300 border-0 dark:bg-gray-600 opacity-80 mx-auto"
+/>
+
+<!-- Feedback Section -->
+<section id="feedback" class="mt-20 px-4">
+  <h2 class="text-3xl md:text-4xl font-bold text-center">Feedback</h2>
+  {% if feedback_form %}
+  <form method="post" class="max-w-lg mx-auto mt-8">
+    {% csrf_token %} {{ feedback_form }}
+    <button
+      type="submit"
+      class="bg-gray-700 hover:bg-gray-600 text-white font-bold py-2 px-4 mt-2 rounded"
+    >
+      Send Feedback
+    </button>
+  </form>
+  {% endif %}
+</section>
+
 <!-- Go Up -->
 <div class="flex justify-center mt-8">
   <a href="#" class="go-up-arrow group">
