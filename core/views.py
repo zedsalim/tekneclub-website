@@ -56,6 +56,9 @@ def homePage_view(request):
 
 def eventsPage_view(request):
     user = request.user
+    query = request.GET.get('q', '')
+    selected_category = request.GET.get('category')
+
     if user.is_authenticated and user.userprofile.is_event_poster:
         categories = Category.objects.annotate(
             post_count=Count('post', filter=Q(post__post_type='Event'))
@@ -65,19 +68,23 @@ def eventsPage_view(request):
             post_count=Count('post', filter=Q(post__status='Published', post__post_type='Event'))
         )
 
-    selected_category = request.GET.get('category')
     if selected_category and not Category.objects.filter(slug=selected_category).exists():
         selected_category = None
 
     published_events = Post.objects.filter(status='Published', post_type='Event')
     if selected_category:
         published_events = published_events.filter(categories__slug=selected_category)
+    
+    if query:
+        published_events = published_events.filter(Q(title__icontains=query) | Q(content__icontains=query))
 
     user_events = Post.objects.none()
     if user.is_authenticated and user.userprofile.is_event_poster:
         user_events = Post.objects.filter(author=user.userprofile, post_type='Event')
         if selected_category:
             user_events = user_events.filter(categories__slug=selected_category)
+        if query:
+            user_events = user_events.filter(Q(title__icontains=query) | Q(content__icontains=query))
 
     all_events = published_events | user_events
     all_events = all_events.order_by('-created_at')
@@ -104,6 +111,7 @@ def eventsPage_view(request):
         'page_obj': events,
         'categories': categories,
         'selected_category': selected_category,
+        'query': query,
     }
     return render(request, 'core/all_events.html', context)
 
