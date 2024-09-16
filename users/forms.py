@@ -2,6 +2,7 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm, AuthenticationForm
 from .models import NewUser, UserProfile, Role
 from external_data.models import StudyYear, University, Department, Interests
+from django.contrib.auth.forms import PasswordResetForm,SetPasswordForm, PasswordChangeForm
 
 class CustomUserCreationForm(UserCreationForm):
     first_name = forms.CharField(
@@ -153,3 +154,35 @@ class UpdateProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
         fields = ['gender', 'profile_pic', 'study_year', 'university', 'department', 'interests', 'github_url', 'linkedin_url']
+
+
+
+class CustomPasswordResetForm(PasswordResetForm):
+    email = forms.EmailField(
+        widget=forms.EmailInput(
+            attrs={
+                'class': 'bg-gray-700 appearance-none border border-gray-600 rounded w-full py-2 px-4 text-white',
+                'placeholder': 'Email',
+            }
+        )
+    )
+
+class CustomSetPasswordForm(SetPasswordForm):
+    new_password1 = forms.CharField(
+        label='New Password',
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'bg-gray-700 appearance-none border border-gray-600 rounded w-full py-2 px-4 mb-2 text-white',
+                'placeholder': 'New Password',
+            }
+        )
+    )
+    new_password2 = forms.CharField(
+        label='Confirm Password',
+        widget=forms.PasswordInput(
+            attrs={
+                'class': 'bg-gray-700 appearance-none border border-gray-600 rounded w-full py-2 px-4 text-white',
+                'placeholder': 'Confirm Password',
+            }
+        )
+    )
