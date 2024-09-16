@@ -110,6 +110,9 @@ def eventsPage_view(request):
 
 def blogsPage_view(request):
     user = request.user
+    query = request.GET.get('q', '')
+    selected_category = request.GET.get('category')
+
     if user.is_authenticated and user.userprofile.is_blog_poster:
         categories = Category.objects.annotate(
             post_count=Count('post', filter=Q(post__post_type='Blog'))
@@ -119,7 +122,6 @@ def blogsPage_view(request):
             post_count=Count('post', filter=Q(post__status='Published', post__post_type='Blog'))
         )
 
-    selected_category = request.GET.get('category')
     if selected_category and not Category.objects.filter(slug=selected_category).exists():
         selected_category = None
 
@@ -127,11 +129,16 @@ def blogsPage_view(request):
     if selected_category:
         published_blogs = published_blogs.filter(categories__slug=selected_category)
 
+    if query:
+        published_blogs = published_blogs.filter(Q(title__icontains=query) | Q(content__icontains=query))
+
     user_blogs = Post.objects.none()
     if user.is_authenticated and user.userprofile.is_blog_poster:
         user_blogs = Post.objects.filter(author=user.userprofile, post_type='Blog')
         if selected_category:
             user_blogs = user_blogs.filter(categories__slug=selected_category)
+        if query:
+            user_blogs = user_blogs.filter(Q(title__icontains=query) | Q(content__icontains=query))
 
     all_blogs = published_blogs | user_blogs
     all_blogs = all_blogs.order_by('-created_at')
@@ -149,6 +156,7 @@ def blogsPage_view(request):
         'all_blogs': blogs,
         'categories': categories,
         'selected_category': selected_category,
+        'query': query,
     }
     return render(request, 'core/all_blogs.html', context)
 
