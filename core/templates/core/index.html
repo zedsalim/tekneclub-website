@@ -16,20 +16,20 @@
     <a
       href="https://discord.gg/3Wv7VvadeY"
       target="_blank"
-      class="mx-2 hover:text-white"
+      class="mx-2 custom-color hover:text-white"
       ><i class="fab fa-discord text-xl md:text-2xl"></i
     ></a>
     <a
       href="https://www.facebook.com/profile.php?id=100090171560447"
       target="_blank"
-      class="mx-2 hover:text-white"
+      class="mx-2 custom-color hover:text-white"
       ><i class="fab fa-facebook-f text-xl md:text-2xl"></i
     ></a>
 
     <a
       href="https://instagram.com/tekne__club"
       target="_blank"
-      class="mx-2 hover:text-white"
+      class="mx-2 custom-color hover:text-white"
       ><i class="fab fa-instagram text-xl md:text-2xl"></i
     ></a>
   </div>
@@ -96,7 +96,7 @@ print("CODE IS ART!")
         <img
           src="{{ item.image.image.url }}"
           alt="Event Image"
-          class="border-solid border-2 border-sky-500 rounded-md w-full h-64 object-cover"
+          class="border-solid border-2 border-gray-400 rounded-md w-full h-64 object-cover"
         />
         {% else %}
         <img
@@ -105,7 +105,9 @@ print("CODE IS ART!")
           class="border-solid border-2 border-sky-500 rounded-md w-full h-64 object-cover"
         />
         {% endif %}
-        <p class="mt-2 font-semibold custom-text-sm sm:text-sm">
+        <p
+          class="mt-2 font-semibold custom-color hover:text-white custom-text-sm sm:text-sm"
+        >
           {{ item.event.title | title | truncatechars:50 }}
         </p>
       </div>
@@ -237,7 +239,7 @@ print("CODE IS ART!")
 
   {% if events_with_images %}
   <div class="text-center mt-10">
-    <a href="{% url 'core:all-events' %}" class="hover:text-white"
+    <a href="{% url 'core:all-events' %}" class="custom-color hover:text-white"
       >See All Events</a
     >
   </div>
@@ -349,7 +351,7 @@ print("CODE IS ART!")
     {% endfor %}
   </div>
   <div class="text-center mt-10">
-    <a href="{% url 'core:all-blogs' %}" class="hover:text-white">See All Blogs</a>
+    <a href="{% url 'core:all-blogs' %}" class="custom-color hover:text-white">See All Blogs</a>
   </div>
   <!---->
   {% else %}

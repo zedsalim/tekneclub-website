@@ -1,6 +1,9 @@
-{% extends "base.html" %} {% load static %}
+{% extends "base.html" %}
 <!---->
-{% block content%}
+{% load static %}
+<!---->
+{% block content %}
+<!-- prettier-ignore -->
 <section class="mt-20 w-3/4 mx-auto text-center">
   <img
     src="{% static 'images/club-logo.png' %}"
@@ -12,7 +15,23 @@
     method="post"
     action="{% url 'users:register' %}"
   >
-    {% csrf_token %} {{ register_form.as_p }}
+    {% csrf_token %}
+    
+    {% for field in register_form %}
+      {% if field.name != 'interests' %}
+        <div class="form-field">
+          {{ field.label_tag }}
+          {{ field }}
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    <!-- Manually render the Interests field with custom label -->
+    <div class="form-field">
+      <label for="id_interests">Interests:</label>
+      {{ register_form.interests }}
+    </div>
+
     <button
       class="bg-gray-700 hover:bg-gray-500 text-white font-bold mt-4 py-2 px-4 rounded"
       type="submit"

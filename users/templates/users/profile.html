@@ -35,13 +35,14 @@
   </div>
 
   <!-- Additional Profile Details -->
+  <!-- prettier-ignore -->
   <div class="mb-6 space-y-2">
-    <p><strong>Gender:</strong> {{ user_profile.gender | title }}</p>
-    <p><strong>Study Year:</strong> {{ user_profile.study_year | upper }}</p>
-    <p><strong>University:</strong> {{ user_profile.university | title }}</p>
-    <p><strong>Department:</strong> {{ user_profile.department | title }}</p>
+    <p><strong class="custom-color">Gender:</strong> {{ user_profile.gender | title }}</p>
+    <p><strong class="custom-color">Study Year:</strong> {{ user_profile.study_year | upper }}</p>
+    <p><strong class="custom-color">University:</strong> {{ user_profile.university | title }}</p>
+    <p><strong class="custom-color">Department:</strong> {{ user_profile.department | title }}</p>
     <p>
-      <strong>Interests:</strong>
+      <strong class="custom-color">Interests:</strong>
       {% for interest in user_profile.interests.all %}
       <!-- -->
       {{ interest | title }}
@@ -51,7 +52,7 @@
       {% endfor %}
     </p>
     <p>
-      <strong>Blog Poster:</strong>
+      <strong class="custom-color">Blog Poster:</strong>
       {{ user_profile.is_blog_poster|yesno:"Yes,No" }}
       <!---->
       {% if user_profile.is_blog_poster %}
@@ -61,7 +62,7 @@
       {% endif %}
     </p>
     <p>
-      <strong>Event Publisher:</strong>
+      <strong class="custom-color">Event Publisher:</strong>
       {{ user_profile.is_event_poster|yesno:"Yes,No" }}
     </p>
   </div>
@@ -82,7 +83,7 @@
     <div class="dialog-content">
       <span class="dialog-close">&times;</span>
       <h2 class="text-xl font-bold">Update Profile</h2>
-      <form method="POST" enctype="multipart/form-data">
+      <form method="POST" enctype="multipart/form-data" class="custom-color">
         {% csrf_token %}
         <!---->
         {{ update_user_form.as_p }}

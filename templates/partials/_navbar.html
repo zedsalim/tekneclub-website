@@ -16,25 +16,43 @@
   <!-- Desktop Menu Items -->
   <div class="hidden md:flex flex-grow justify-center">
     <ul class="flex space-x-4">
-      <li><a href="{% url 'core:home' %}" class="hover:text-white">Home</a></li>
       <li>
-        <a href="{% url 'core:all-events' %}" class="hover:text-white"
+        <a href="{% url 'core:home' %}" class="custom-color hover:text-white"
+          >Home</a
+        >
+      </li>
+      <li>
+        <a
+          href="{% url 'core:all-events' %}"
+          class="custom-color hover:text-white"
           >Events</a
         >
       </li>
       <li>
-        <a href="{% url 'core:all-blogs' %}" class="hover:text-white">Blogs</a>
+        <a
+          href="{% url 'core:all-blogs' %}"
+          class="custom-color hover:text-white"
+          >Blogs</a
+        >
       </li>
       <li>
-        <a href="{% url 'core:home' %}#about" class="hover:text-white">About</a>
+        <a
+          href="{% url 'core:home' %}#about"
+          class="custom-color hover:text-white"
+          >About</a
+        >
       </li>
       <li>
-        <a href="{% url 'core:home' %}#contact" class="hover:text-white"
+        <a
+          href="{% url 'core:home' %}#contact"
+          class="custom-color hover:text-white"
           >Contact</a
         >
       </li>
       <li>
-        <a href="{% url 'core:home' %}#feedback" class="hover:text-gray-400"
+        <a
+          href="{% url 'core:home' %}#feedback"
+          class="custom-color hover:text-white"
           >Feedback</a
         >
       </li>
@@ -48,7 +66,7 @@
     <div class="relative">
       <button
         id="user-menu-btn"
-        class="flex items-center space-x-2 hover:text-white"
+        class="flex items-center space-x-2 custom-color hover:text-white"
       >
         <span>Menu</span>
         <svg
@@ -74,7 +92,7 @@
           <li>
             <a
               href="{% url 'users:profile' user.userprofile.slug %}"
-              class="block px-4 py-2 hover:bg-gray-100 rounded-t-lg"
+              class="block px-4 py-2 custom-color hover:bg-gray-100 rounded-t-lg"
               >Profile</a
             >
           </li>
@@ -82,7 +100,7 @@
           <li>
             <a
               href="{% url 'core:new-blog' %}"
-              class="block px-4 py-2 hover:bg-gray-100 rounded-t-lg"
+              class="block px-4 py-2 custom-color hover:bg-gray-100 rounded-t-lg"
               >Create Blog</a
             >
           </li>
@@ -92,7 +110,7 @@
           <li>
             <a
               href="{% url 'core:new-event' %}"
-              class="block px-4 py-2 hover:bg-gray-100 rounded-t-lg"
+              class="block px-4 py-2 custom-color hover:bg-gray-100 rounded-t-lg"
               >Post Event</a
             >
           </li>
@@ -102,7 +120,7 @@
           <li>
             <a
               href="{% url 'chat_messages:messages' %}"
-              class="block px-4 py-2 hover:bg-gray-100"
+              class="block px-4 py-2 custom-color hover:bg-gray-100"
               >All Messages</a
             >
           </li>
@@ -110,7 +128,7 @@
           <li>
             <a
               href="{% url 'chat_messages:users-messages' %}"
-              class="block px-4 py-2 hover:bg-gray-100"
+              class="block px-4 py-2 custom-color hover:bg-gray-100"
               >My Messages</a
             >
           </li>
@@ -118,7 +136,7 @@
           <li>
             <a
               href="{% url 'admin:index' %}"
-              class="block px-4 py-2 hover:bg-gray-100"
+              class="block px-4 py-2 custom-color hover:bg-gray-100"
               >Admin</a
             >
           </li>
@@ -126,7 +144,7 @@
           <li>
             <a
               href="javascript:{document.getElementById('logout').submit()}"
-              class="block px-4 py-2 hover:bg-gray-100 rounded-b-lg"
+              class="block px-4 py-2 custom-color hover:bg-gray-100 rounded-b-lg"
               >Logout</a
             >
             <form action="{% url 'users:logout' %}" method="post" id="logout">
@@ -186,28 +204,42 @@
   </div>
   <ul class="flex flex-col space-y-4 mt-10">
     <li>
-      <a href="{% url 'core:home' %}" class="hover:text-gray-400">Home</a>
+      <a href="{% url 'core:home' %}" class="custom-color hover:text-gray-400"
+        >Home</a
+      >
     </li>
     <li>
-      <a href="{% url 'core:all-events' %}" class="hover:text-gray-400"
+      <a
+        href="{% url 'core:all-events' %}"
+        class="custom-color hover:text-gray-400"
         >Events</a
       >
     </li>
     <li>
-      <a href="{% url 'core:all-blogs' %}" class="hover:text-gray-400">Blogs</a>
+      <a
+        href="{% url 'core:all-blogs' %}"
+        class="custom-color hover:text-gray-400"
+        >Blogs</a
+      >
     </li>
     <li>
-      <a href="{% url 'core:home' %}#about" class="hover:text-gray-400"
+      <a
+        href="{% url 'core:home' %}#about"
+        class="custom-color hover:text-gray-400"
         >About</a
       >
     </li>
     <li>
-      <a href="{% url 'core:home' %}#contact" class="hover:text-gray-400"
+      <a
+        href="{% url 'core:home' %}#contact"
+        class="custom-color hover:text-gray-400"
         >Contact</a
       >
     </li>
     <li>
-      <a href="{% url 'core:home' %}#feedback" class="hover:text-gray-400"
+      <a
+        href="{% url 'core:home' %}#feedback"
+        class="custom-color hover:text-gray-400"
         >Feedback</a
       >
     </li>
@@ -218,13 +250,15 @@
     <li>
       <a
         href="{% url 'users:profile' user.userprofile.slug %}"
-        class="hover:text-gray-400"
+        class="custom-color hover:text-gray-400"
         >Profile</a
       >
     </li>
     {% if user.userprofile.is_blog_poster %}
     <li>
-      <a href="{% url 'core:new-blog' %}" class="hover:text-gray-400"
+      <a
+        href="{% url 'core:new-blog' %}"
+        class="custom-color hover:text-gray-400"
         >Create Blog</a
       >
     </li>
@@ -232,7 +266,9 @@
     <!---->
     {% if user.userprofile.is_event_poster %}
     <li>
-      <a href="{% url 'core:new-event' %}" class="hover:text-gray-400"
+      <a
+        href="{% url 'core:new-event' %}"
+        class="custom-color hover:text-gray-400"
         >Post Event</a
       >
     </li>
@@ -240,7 +276,9 @@
     <!---->
     {% if user.userprofile.is_responder %}
     <li>
-      <a href="{% url 'chat_messages:messages' %}" class="hover:bg-gray-400"
+      <a
+        href="{% url 'chat_messages:messages' %}"
+        class="custom-color hover:bg-gray-400"
         >All Messages</a
       >
     </li>
@@ -248,13 +286,15 @@
     <!---->
     {% if user.is_staff %}
     <li>
-      <a href="{% url 'admin:index' %}" class="hover:text-gray-400">Admin</a>
+      <a href="{% url 'admin:index' %}" class="custom-color hover:text-gray-400"
+        >Admin</a
+      >
     </li>
     {% endif %}
     <li>
       <a
         href="javascript:{document.getElementById('logout').submit()}"
-        class="hover:text-gray-400"
+        class="custom-color hover:text-gray-400"
         >Logout</a
       >
       <form action="{% url 'users:logout' %}" method="post" id="logout">

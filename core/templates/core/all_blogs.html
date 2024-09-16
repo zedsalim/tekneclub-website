@@ -37,7 +37,7 @@
             Filter by Category:
           </label>
           <select name="category" id="category" onchange="this.form.submit()"
-                  class="block w-full px-4 py-2 bg-gray-100 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600">
+                  class="block w-full px-4 py-2 bg-gray-100 custom-color border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-gray-600">
             <option value="">All Categories</option>
             {% for category in categories %}
               <option value="{{ category.slug }}" 

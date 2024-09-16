@@ -10,11 +10,44 @@ html {
 
 body {
   background-color: #222222;
+  color: whitesmoke;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+label[for="id_password"],
+label[for="id_password1"],
+label[for="id_password2"],
+label[for="id_email"],
+label[for="id_username"],
+label[for="id_first_name"],
+label[for="id_last_name"],
+label[for="id_gender"],
+label[for="id_profile_pic"],
+label[for="id_study_year"],
+label[for="id_university"],
+label[for="id_department"],
+label[for="id_interests"],
+label[for="id_github_url"],
+label[for="id_linkedin_url"],
+label[for="id_content"],
+label[for="id_fbk_content"],
+label[for="id_subject"],
+label[for="id_name"],
+label[for="id_fbk_name"] {
   color: #5d8aa8;
 }
 
 .bg-custom {
   background-color: #222222;
+}
+
+.custom-color {
+  color: #5d8aa8;
 }
 
 .navbar,
@@ -58,6 +91,7 @@ body {
 }
 
 .go-up-arrow {
+  color: #5d8aa8;
   transition: transform 0.3s ease, color 0.3s ease;
 }
 
