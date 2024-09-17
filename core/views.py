@@ -299,7 +299,7 @@ def upload_image_view(request):
 
                 image_obj = PostImages.objects.create(image=file_path)
 
-                image_url = f'<img class="w-full my-6 rounded-lg shadow-lg" src="{default_storage.url(file_path)}">'
+                image_url = f'<img alt="Image" class="w-full my-5 rounded-lg shadow-lg" src="{default_storage.url(file_path)}">'
                 return JsonResponse(
                     {"success": True, "image_url": image_url, "image_id": image_obj.id}
                 )
