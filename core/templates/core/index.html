@@ -215,7 +215,7 @@
               </p>
           </div>
           <div class="post-container">
-            <p class="text-base pt-7">{{ item.event.content| convert_markdown | safe }}</p>
+            <p>{{ item.event.content | convert_markdown | safe }}</p>
           </div>
         <!-- Categories Section -->
         {% if item.event.categories.all %}
@@ -283,7 +283,7 @@
           <a href="{% url 'users:profile' item.author.slug %}" class="font-medium underline hover:text-white">{{ item.author }}</a>
         </p>
       </div>
-      <p class="mt-2 flex-grow">{{ item.content | truncate_html:250 | safe }}</p>
+      <p class="mt-2 flex-grow">{{ item.content | convert_markdown | truncate_html:250 | safe }}</p>
       <div class="mt-2 flex justify-start">
         <a href="{% url 'core:blog-detail' item.slug %}" class="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded inline-block">Read more</a>
       </div>
