@@ -42,3 +42,12 @@ function typeWriter(element, text, speed) {
 
 const textElement = document.getElementById("typewriter-text");
 typeWriter(textElement, text, speed);
+
+// Disable buttons on submit
+function disableSubmitButton(buttonId) {
+  const button = document.getElementById(buttonId);
+  button.disabled = true;
+  button.classList.add("cursor-not-allowed");
+  button.innerHTML =
+    '<div class="flex items-center space-x-2"><div class="spinner"></div><span>Sending...</span></div>';
+}

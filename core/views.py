@@ -4,6 +4,8 @@ from PIL import Image, UnidentifiedImageError
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib import messages
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 from django.db.models import Count, Q
 from django.core.exceptions import ValidationError
 from django.core.files.storage import default_storage
@@ -34,12 +36,33 @@ def homePage_view(request):
     if request.method == 'POST' and request.POST.get('subject'):
         contact_form = ContactUsForm(request.POST)
         if contact_form.is_valid():
+            name = contact_form.cleaned_data['name']
+            email = contact_form.cleaned_data['email']
+            subject = contact_form.cleaned_data['subject']
+            message = contact_form.cleaned_data['content']
+
             if current_user.is_authenticated:
                 contact = contact_form.save(commit=False)
                 contact.sender = current_user.userprofile
                 contact.save()
             else:
                 contact = contact_form.save()
+            
+            html_content = render_to_string('chat_messages/email/contact_us_template.html', {
+                'name': name,
+                'email': email,
+                'subject': subject,
+                'message': message,
+            })
+            email_message = EmailMultiAlternatives(
+                subject=f"Contact Form Submission: {subject}",
+                body=message,
+                from_email=email,
+                to=['mitejax537@nastyx.com']
+            )
+            email_message.attach_alternative(html_content, "text/html")
+            email_message.send()
+
             messages.success(request, 'Message sent successfully')
             return redirect('core:home')
         else:
