@@ -122,4 +122,45 @@
       });
   };
 </script>
+
+{% if add_event_form %}
+<script>
+  const textarea = document.getElementById("id_content");
+  const htmlContent = `<!-- --------- [Slider Starts] --------- -->
+<div class="lightSlider-container w-full mx-auto">
+  <div class="lightSlider-images">
+    <!-- ------------------ [Images Link Tag Starts] ------------------ -->
+
+
+
+
+    <!-- ------------------ [Images Link Tag Ends] ------------------ -->
+  </div>
+
+  <!-- ------------------ [DON'T TOUCH THIS] ------------------ -->
+  <div>
+    <button
+      id="prev"
+      class="font-semibold absolute top-1/2 left-2 transform -translate-y-1/2 bg-black text-white p-3 rounded"
+    >
+      &#10094;
+    </button>
+    <button
+      id="next"
+      class="font-semibold absolute top-1/2 right-2 transform -translate-y-1/2 bg-black text-white p-3 rounded"
+    >
+      &#10095;
+    </button>
+  </div>
+</div>
+<!-- --------- [Slider Ends] --------- -->
+
+<!-- --------- [Your Markdown] --------- -->
+`;
+  if (textarea) {
+    textarea.value = htmlContent;
+  }
+</script>
+{% endif %}
+<!---->
 {% endblock %}

@@ -1,0 +1,12 @@
+.lightSlider-container {
+  overflow: hidden;
+  position: relative;
+}
+.lightSlider-images {
+  display: flex;
+  transition: transform 0.5s ease-in-out;
+}
+.lightSlider-images img {
+  min-width: 100%;
+  box-sizing: border-box;
+}

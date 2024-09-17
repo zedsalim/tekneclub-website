@@ -77,7 +77,6 @@
             >{{ item.event.title | safe | title | truncatechars:50 }}</a
           >
         </h3>
-        <p class="mt-2">{{ item.event.content | truncate_html:50 | safe }}</p>
       </div>
       {% if user == item.event.author.user %}
       <!-- Action Buttons -->
