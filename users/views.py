@@ -1,8 +1,16 @@
+from django.contrib.auth.tokens import default_token_generator
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+from django.template.loader import render_to_string
+from django.contrib.sites.shortcuts import get_current_site
+from django.utils.encoding import force_bytes, force_str
+from django.contrib.auth import get_user_model
+from django.core.mail import send_mail
+from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, logout 
 from django.shortcuts import redirect, render, get_object_or_404
 from django.contrib import messages
-from .forms import CustomUserCreationForm, CustomAuthenticationForm, UpdateUserForm, UpdateProfileForm
+from .forms import *
 from .models import UserProfile
 
 
@@ -89,3 +97,85 @@ def profile_view(request, slug):
             'user_profile': user_profile,
         }
     return render(request, 'users/profile.html', context)
+
+
+def password_reset_request(request):
+    if request.user.is_authenticated:
+        messages.error(request, "Please log out first.")
+        return redirect('core:home')
+    User = get_user_model()
+    if request.method == 'POST':
+        form = CustomPasswordResetForm(request.POST)
+        if form.is_valid():
+            email = form.cleaned_data.get('email')
+            user = User.objects.filter(email=email).first()
+            if user:
+                site = get_current_site(request)
+                subject = "Password Reset Request"
+                email_template_name = "users/password_reset_email.html"
+                context = {
+                    'email': email,
+                    'domain': site.domain,
+                    'site_name': site.name,
+                    'uid': urlsafe_base64_encode(force_bytes(user.pk)),
+                    'token': default_token_generator.make_token(user),
+                    'protocol': 'https' if request.is_secure() else 'http',
+                }
+                email_body = render_to_string(email_template_name, context)
+                send_mail(subject, email_body, settings.DEFAULT_FROM_EMAIL, [email], fail_silently=False)
+                messages.info(request, f"Password reset email sent to {email}")
+                request.session['password_reset_requested'] = True
+            else:
+                messages.error(request, f"Account not found with this email.")
+                return redirect('users:password_reset')
+            return redirect('users:password_reset_done')
+    else:
+        form = CustomPasswordResetForm()
+
+    context = {
+        'form': form,
+    }
+    return render(request, 'users/password_reset.html', context)
+
+def password_reset_done(request):
+    if request.user.is_authenticated:
+        messages.error(request, "Please log out first.")
+        return redirect('core:home')
+
+    if request.session.get('password_reset_requested', False):
+        del request.session['password_reset_requested']
+        return render(request, 'users/password_reset_done.html')
+    else:
+        messages.error(request, "Unauthorized access")
+        return redirect('users:password_reset')
+
+
+def password_reset_confirm(request, uidb64, token):
+    if request.user.is_authenticated:
+        messages.error(request, "Please log out first.")
+        return redirect ('core:home')
+    User = get_user_model()
+    try:
+        uid = force_str(urlsafe_base64_decode(uidb64))
+        user = User.objects.get(pk=uid)
+    except (TypeError, ValueError, OverflowError, User.DoesNotExist):
+        user = None
+
+    if user is not None and default_token_generator.check_token(user, token):
+        if request.method == 'POST':
+            form = CustomSetPasswordForm(user, request.POST)
+            if form.is_valid():
+                form.save()
+                messages.success(request, f"Password reset successfully")
+                return redirect('users:login')
+        else:
+            form = CustomSetPasswordForm(user)
+        
+        context = {
+            'form': form,
+        }
+        return render(request, 'users/password_reset_confirm.html', context)
+
+    else:
+        messages.error(request, "Invalid password reset attempt")
+        return redirect('core:home')
