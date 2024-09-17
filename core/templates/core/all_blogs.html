@@ -1,7 +1,9 @@
 {% extends 'base.html' %}
 <!-- -->
 {% load static %}
-<!-- -->
+<!---->
+{% load md_to_html %}
+<!---->
 {% load custom_filters %}
 <!-- -->
 {% block content %}
@@ -75,7 +77,7 @@
         </p>
     </div>
       <p class="mt-2 flex-grow">
-        {{ blog.content | truncate_html:250 | safe }}
+        {{ blog.content | convert_markdown | truncate_html:250 | safe }}
       </p>
       <div class="mt-2 flex justify-start">
         <a

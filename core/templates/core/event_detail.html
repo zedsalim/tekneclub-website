@@ -1,4 +1,6 @@
 {% extends 'base.html' %}
+<!---->
+{% load md_to_html %}
 <!-- -->
 {% block content %}
 <!-- -->
@@ -86,7 +88,11 @@
           >
         </p>
     </div>
-  <p class="mt-4 text-lg">{{ event_detail.content | safe }}</p>
+  <div class="post-container">
+    <p class="mt-4 text-lg">
+      {{ event_detail.content | convert_markdown | safe }}
+    </p>
+  </div>
 
   <!-- Categories Section -->
   {% if event_detail.categories.all %}
