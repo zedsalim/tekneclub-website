@@ -1,6 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import get_object_or_404
 from django.contrib import messages
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 from django.shortcuts import render, redirect
 from .models import Message, Reply
 from .forms import ReplyMessageForm
@@ -103,12 +105,31 @@ def replyToMessage_view(request, pk):
       if request.method == 'POST':
           reply_form = ReplyMessageForm(request.POST)
           if reply_form.is_valid():
+              subject = msg_to_reply.subject
+              email_to = msg_to_reply.email
+              message = reply_form.cleaned_data['content']
+              responder = f'{current_user.first_name.capitalize()} {current_user.last_name.capitalize()}'
+
               reply_msg = reply_form.save(commit=False)
               reply_msg.responder = current_user.userprofile
               reply_msg.message = msg_to_reply
               reply_msg.save()
               msg_to_reply.status = 'Replied'
               msg_to_reply.save()
+
+              html_content = render_to_string('chat_messages/email/reply_template.html', {
+                  'responder': responder,
+                  'subject': subject,
+                  'message': message,
+              })
+              email_message = EmailMultiAlternatives(
+                  subject=f'Reply to: {subject}',
+                  body=message,
+                  to=[email_to]
+              )
+              email_message.attach_alternative(html_content, "text/html")
+              email_message.send()
+
               messages.success(request, 'Message replied successfully')
               return redirect('chat_messages:messages')
           else:

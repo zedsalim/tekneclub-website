@@ -55,9 +55,8 @@ def homePage_view(request):
                 'message': message,
             })
             email_message = EmailMultiAlternatives(
-                subject=f"Contact Form Submission: {subject}",
+                subject=f"New Message: {subject}",
                 body=message,
-                from_email=email,
                 to=['mitejax537@nastyx.com']
             )
             email_message.attach_alternative(html_content, "text/html")

@@ -16,10 +16,10 @@
       <p class="text-gray-700">{{ msg_to_reply.content|linebreaksbr }}</p>
   </div>
 
-  <form method="post" action="{% url 'chat_messages:reply-message' msg_to_reply.pk %}">
+  <form method="post" action="{% url 'chat_messages:reply-message' msg_to_reply.pk %}" onsubmit="disableSubmitButton('reply-button')">
     {% csrf_token %}
     {{ reply_form }}
-    <button type="submit" class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-600">
+    <button id="reply-button" type="submit" class="bg-gray-700 text-white font-semibold py-2 px-4 rounded-md hover:bg-gray-600">
         Send Reply
     </button>
   </form>
